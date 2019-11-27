@@ -23,10 +23,13 @@
 <script>
 export default {
   name: 'ImInput',
+  props: {
+    value: [String, Number]
+  },
   data () {
     return {
       form: {
-        newValue: this.$attrs.value
+        newValue: this.value
       }
     }
   },
@@ -36,6 +39,13 @@ export default {
     }
   },
   watch: {
+    value: {
+      handler (vl) {
+        this.form.newValue = vl
+      },
+      deep: true,
+      immediate: true
+    },
     'form.newValue': {
       handler (vl) {
         this.$emit('onInput', vl)

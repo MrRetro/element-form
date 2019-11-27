@@ -28,6 +28,9 @@
 <script>
 export default {
   name: 'ImCheckBox',
+  props: {
+    value: Array
+  },
   data () {
     return {
       form: {
@@ -41,6 +44,13 @@ export default {
     }
   },
   watch: {
+    value: {
+      handler (vl) {
+        this.form.newValue = vl
+      },
+      deep: true,
+      immediate: true
+    },
     'form.newValue': {
       handler (vl) {
         this.$emit('onInput', vl)
@@ -61,6 +71,9 @@ export default {
 </script>
 
 <style scoped>
+.form-input >>> .el-checkbox{
+  margin-right: 0px;
+}
 .form-input{
   display: flex;
   flex-direction: row;

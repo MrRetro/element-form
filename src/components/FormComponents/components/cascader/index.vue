@@ -23,10 +23,13 @@
 <script>
 export default {
   name: 'ImCascader',
+  props: {
+    value: [String, Array]
+  },
   data () {
     return {
       form: {
-        newValue: this.$attrs.value.split(',')
+        newValue: typeof this.value === 'String' ? this.value.split(',') : this.value
       }
     }
   },
@@ -46,6 +49,13 @@ export default {
     }
   },
   watch: {
+    value: {
+      handler (vl) {
+        this.form.newValue = vl
+      },
+      deep: true,
+      immediate: true
+    },
     'form.newValue': {
       handler (vl) {
         this.$emit('onInput', `${vl}`)

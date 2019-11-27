@@ -35,6 +35,9 @@
 <script>
 export default {
   name: 'ImUpload',
+  props: {
+    value: String
+  },
   data () {
     return {
       form: {
@@ -48,6 +51,13 @@ export default {
     }
   },
   watch: {
+    value: {
+      handler (vl) {
+        this.form.newValue = vl
+      },
+      deep: true,
+      immediate: true
+    },
     'form.newValue': {
       handler (vl) {
         this.$emit('onInput', vl)

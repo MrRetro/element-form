@@ -27,10 +27,13 @@
 <script>
 export default {
   name: 'ImRadio',
+  props: {
+    value: String
+  },
   data () {
     return {
       form: {
-        newValue: this.$attrs.value
+        newValue: this.value
       }
     }
   },
@@ -40,6 +43,13 @@ export default {
     }
   },
   watch: {
+    value: {
+      handler (vl) {
+        this.form.newValue = vl
+      },
+      deep: true,
+      immediate: true
+    },
     'form.newValue': {
       handler (vl) {
         this.$emit('onInput', `${vl}`)
@@ -60,6 +70,9 @@ export default {
 </script>
 
 <style scoped>
+.form-input >>> .el-radio{
+  margin-right: 0px;
+}
 .form-input{
   display: flex;
   flex-direction: row;

@@ -47,7 +47,7 @@ export default {
   },
   props: {
     name: String,
-    value: [String, Number, Array],
+    value: [String, Number, Array, Boolean, Date],
     type: String,
     props: Object,
     index: [Number, String],
