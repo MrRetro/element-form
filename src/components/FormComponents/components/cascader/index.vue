@@ -29,7 +29,7 @@ export default {
   data () {
     return {
       form: {
-        newValue: typeof this.value === 'String' ? this.value.split(',') : this.value
+        newValue: typeof this.value === 'string' ? this.value.split(',') : this.value
       }
     }
   },
