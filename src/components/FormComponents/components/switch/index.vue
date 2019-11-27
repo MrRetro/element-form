@@ -29,7 +29,7 @@ export default {
   data () {
     return {
       form: {
-        newValue: this.$attrs.value
+        newValue: this.value
       }
     }
   },

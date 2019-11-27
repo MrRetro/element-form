@@ -11,6 +11,12 @@
         @onInput="onInput"
       />
     </div>
+    <p class="btn-box">
+      <el-button
+        v-if="subName"
+        @click="validateForm"
+      >{{subName}}</el-button>
+    </p>
   </div>
 </template>
 
@@ -22,6 +28,7 @@ export default {
     FormComponents
   },
   props: {
+    subName: String,
     form: {
       type: Array,
       default: () => []
@@ -70,5 +77,8 @@ export default {
 </script>
 
 <style scoped>
-
+.btn-box{
+  display: flex;
+  padding: 20px;
+}
 </style>

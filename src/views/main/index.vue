@@ -7,7 +7,7 @@
     </div>
     <div class="box">
       <div class="pad">
-        <FormCom :form="form"/>
+        <FormCom :form="form" sub-name="提交校验表单"/>
       </div>
     </div>
   </div>
@@ -61,7 +61,7 @@ export default {
         { name: '数量', value: '', type: 'InputNumber', props: { placeholder: '请输入', rules: { required: true } } },
         { name: '单项选题', value: '', type: 'Select', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } }, options: [{ key: '1', value: '男' }, { key: '2', value: '女' }] },
         { name: '级联选择器', value: [], type: 'Cascader', props: { placeholder: '请输入', rules: { required: true, message: '请输入' } }, options: [{ key: '1', value: '男', children: [{ key: '3', value: '未知' }] }, { key: '2', value: '女' }] },
-        { name: '开关', value: '', type: 'Switch', props: { placeholder: '选择', rules: { required: true, message: '请选择' } } },
+        { name: '开关', value: false, type: 'Switch', props: { placeholder: '选择', rules: { required: true, message: '请选择' } } },
         { name: '滑块', value: 30, type: 'Slider', props: { placeholder: '选择', rules: { required: true, message: '请选择' } } },
         { name: '时间选择器', value: '', type: 'TimePicker', props: { placeholder: '选择', rules: { required: true, message: '请选择' } } },
         { name: '日期选择器', value: '', type: 'DatePicker', props: { placeholder: '选择', rules: { required: true, message: '请选择' } } },
