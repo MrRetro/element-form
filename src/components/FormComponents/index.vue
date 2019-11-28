@@ -2,7 +2,9 @@
   <div>
     <div
       v-for="(item,index) in newForm"
-      :key="index">
+      :key="index"
+      class="component"
+    >
       <FormComponents
         ref="form"
         v-bind="item"
@@ -10,6 +12,10 @@
         :index="index"
         @onInput="onInput"
       />
+      <span
+        v-if="isDelete"
+        class="close"
+        @click="close(index)">x</span>
     </div>
     <p class="btn-box">
       <el-button
@@ -28,6 +34,10 @@ export default {
     FormComponents
   },
   props: {
+    isDelete: {
+      type: Boolean,
+      default: false
+    },
     subName: String,
     form: {
       type: Array,
@@ -49,8 +59,13 @@ export default {
     }
   },
   methods: {
-    onInput (target, index) {
+    onInput (target, index, item) {
       this.newForm[index].value = target
+
+      // 回调通知组件变更
+      if (item) {
+        this.$emit('onAttr', item)
+      }
     },
     getFormValue () {
       return this.newForm
@@ -71,6 +86,10 @@ export default {
         console.log('err==>', e)
       }
       return state
+    },
+    // 删除
+    close (index) {
+      this.$emit('onDelete', index)
     }
   }
 }
@@ -80,5 +99,21 @@ export default {
 .btn-box{
   display: flex;
   padding: 20px;
+}
+.component{
+  position: relative;
+}
+.close{
+  position: absolute;
+  top: -6px;
+  background-color: #F56C6C;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  line-height: 18px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  font-size: 12px;
 }
 </style>

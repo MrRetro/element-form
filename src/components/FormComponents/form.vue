@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     onInput (vl) {
-      this.$emit('onInput', vl, this.index)
+      this.$emit('onInput', vl, this.index, this.$attrs)
     },
     validate () {
       return this.$refs.formItem.validate && this.$refs.formItem.validate()

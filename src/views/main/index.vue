@@ -4,10 +4,31 @@
       <div class="pad one">
         <textarea class="left" v-model="value" @input="onChange"></textarea>
       </div>
+      <div class="btns">
+        <el-button
+          size="small"
+          class="btn"
+          type="danger"
+          @click="clearAll"
+        >清除</el-button>
+        <el-button
+          v-for="(item,key) in initForm"
+          :key="key"
+          size="small"
+          class="btn"
+          @click="addComp(key)"
+        >{{item.name}}</el-button>
+      </div>
     </div>
     <div class="box">
       <div class="pad">
-        <FormCom :form="form" sub-name="提交校验表单"/>
+        <FormCom
+          :form="form"
+          :is-delete="true"
+          sub-name="提交校验表单"
+          @onAttr="onAttr"
+          @onDelete="onDelete"
+        />
       </div>
     </div>
   </div>
@@ -26,7 +47,10 @@ export default {
     form: {
       handler (vl) {
         try {
-          this.value = formatJson(this.form)
+          if (JSON.stringify(JSON.parse(this.value)) !== JSON.stringify(JSON.parse(this.oldValue))) {
+            this.value = formatJson(this.form)
+            this.oldValue = this.value
+          }
         } catch (e) {
           console.log(e)
         }
@@ -37,6 +61,8 @@ export default {
   },
   created () {
     this.value = formatJson(this.form)
+    this.oldValue = this.value
+    this.initForm = JSON.parse(JSON.stringify(this.form))
   },
   data () {
     const generateData = _ => {
@@ -52,10 +78,12 @@ export default {
     }
     return {
       value: [],
+      oldValue: [], // 历史数据
+      initForm: [], // 初始化数据
       data: generateData(),
       form: [
         // { name: '确定', type: 'Button', props: { type: 'big' } },
-        { name: '请输入', value: '', type: 'Input', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } } },
+        { attr: 'title', name: '请输入', value: '', type: 'Input', props: { placeholder: '请输入1或2试试', rules: { required: true, message: '请输入', target: 'blur' } } },
         { name: '单选', value: '', type: 'Radio', props: { rules: { required: true, message: '请选择' }, border: true }, options: [{ key: '1', value: '男' }, { key: '2', value: '女' }] },
         { name: '多选', value: [], type: 'CheckBox', props: { rules: { required: true, message: '请选择' }, border: true }, options: ['男', '女'] },
         { name: '数量', value: '', type: 'InputNumber', props: { placeholder: '请输入', rules: { required: true } } },
@@ -73,12 +101,55 @@ export default {
     }
   },
   methods: {
-    onChange () {
+    onChange (e) {
       try {
         this.form = JSON.parse(this.value)
       } catch (e) {
         console.log(e)
       }
+    },
+    onAttr (item) {
+      console.log('retro-item==>', item)
+      if (item) {
+        switch (item.attr) {
+          case 'title':
+            this.form.map(v => {
+              if (['1', '2'].includes(v.value)) {
+                this.form.map(q => {
+                  if (q.type === 'Radio') {
+                    q.value = v.value
+                  }
+                })
+              }
+            })
+
+            break
+          default:
+        }
+      }
+    },
+    // 添加组件
+    addComp (index) {
+      try {
+        let newForm = JSON.parse(this.value)
+        newForm.push(this.initForm[index])
+        this.value = formatJson(newForm)
+        this.form = JSON.parse(this.value)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    onDelete (index) {
+      try {
+        this.form.splice(index, 1)
+        this.value = formatJson(this.form)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    clearAll () {
+      this.value = formatJson([])
+      this.form = JSON.parse(this.value)
     }
   }
 }
@@ -95,6 +166,21 @@ export default {
   width: 50%;
   height: 100vh;
   overflow-y: auto;
+  position: relative;
+}
+.btns{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.btn{
+  width: 100px;
+  margin-left: 0px;
+  margin-right: 10px;
 }
 .pad{
   padding: 20px;

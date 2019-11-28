@@ -6,15 +6,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import router from './router'
 
-window.String.prototype.print_f = function () {
-  var formatted = this
-  for (var i = 0; i < arguments.length; i++) {
-    var regexp = new RegExp('\\{' + i + '\\}', 'gi')
-    formatted = formatted.replace(regexp, arguments[i])
-  }
-  return formatted
-}
-
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
