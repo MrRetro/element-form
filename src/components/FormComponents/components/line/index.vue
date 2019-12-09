@@ -41,7 +41,7 @@ export default {
       },
       deep: true,
       immediate: true
-    },
+    }
   },
   methods: {
     validate () {
