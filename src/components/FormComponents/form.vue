@@ -1,8 +1,10 @@
 <template>
   <div class="form">
     <component
+      style="width: 100%"
       ref="formItem"
       :is="comp"
+      :attrs="$attrs"
       v-bind="$props"
       v-model="value"
       @onInput="onInput"
@@ -26,6 +28,8 @@ import ImUpload from './components/upload'
 import ImRate from './components/rate'
 import ImColorPicker from './components/colorPicker'
 import ImTransfer from './components/transfer'
+import ImLayout from './components/layout'
+import ImLine from './components/line'
 
 export default {
   name: 'FormComponent',
@@ -45,7 +49,9 @@ export default {
     ImUpload,
     ImRate,
     ImColorPicker,
-    ImTransfer
+    ImTransfer,
+    ImLayout,
+    ImLine
   },
   props: {
     name: String,

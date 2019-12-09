@@ -83,7 +83,42 @@ export default {
       data: generateData(),
       form: [
         // { name: '确定', type: 'Button', props: { type: 'big' } },
+        { name: '左排线', type: 'Line', position: 'left' },
+        { name: '左排版',
+          type: 'Layout',
+          position: 'left',
+          options: [
+            { attr: 'title', name: '请输入', value: '', type: 'Input', props: { placeholder: '请输入1或2试试', rules: { required: true, message: '请输入', target: 'blur' } } },
+            { attr: 'content', name: '请输入', value: '', type: 'Input', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } } }
+          ] },
+
+        { name: '居中线', type: 'Line', position: 'center' },
+        { name: '居中',
+          type: 'Layout',
+          position: 'center',
+          options: [
+            { name: '开关', value: false, type: 'Switch', props: { placeholder: '选择', rules: { required: true, message: '请选择' } } },
+            { name: '开关', value: false, type: 'Switch', props: { placeholder: '选择', rules: { required: true, message: '请选择' } } },
+            { name: '开关', value: false, type: 'Switch', props: { placeholder: '选择', rules: { required: true, message: '请选择' } } }
+          ] },
+        { name: '各50%线', type: 'Line', position: 'left' },
+        { name: '各50%',
+          type: 'Layout',
+          position: 'justify',
+          options: [
+            { attr: 'title', name: '请输入', value: '', type: 'Input', props: { placeholder: '请输入1或2试试', rules: { required: true, message: '请输入', target: 'blur' } } },
+            { attr: 'content', name: '请输入', value: '', type: 'Input', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } } }
+          ] },
+        { name: '右排线', type: 'Line', position: 'right' },
+        { name: '右排版',
+          type: 'Layout',
+          position: 'right',
+          options: [
+            { attr: 'title', name: '请输入', value: '', type: 'Input', props: { placeholder: '请输入1或2试试', rules: { required: true, message: '请输入', target: 'blur' } } },
+            { attr: 'content', name: '请输入', value: '', type: 'Input', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } } }
+          ] },
         { attr: 'title', name: '请输入', value: '', type: 'Input', props: { placeholder: '请输入1或2试试', rules: { required: true, message: '请输入', target: 'blur' } } },
+        { attr: 'content', name: '请输入', value: '', type: 'Input', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' }, type: 'textarea', rows: '2' } },
         { name: '单选', value: '', type: 'Radio', props: { rules: { required: true, message: '请选择' }, border: true }, options: [{ key: '1', value: '男' }, { key: '2', value: '女' }] },
         { name: '单项选择', value: '', type: 'RadioGroup', props: { rules: { required: true, message: '请选择' }, border: true }, options: [{ key: '1', value: '选项一' }, { key: '2', value: '选项二' }, { key: '3', value: '选项三' }] },
         { name: '多选', value: [], type: 'CheckBox', props: { rules: { required: true, message: '请选择' }, border: true }, options: ['男', '女'] },
@@ -185,7 +220,7 @@ export default {
 }
 .pad{
   padding: 20px;
-  padding-right: 0px;
+  /*padding-right: 0px;*/
   padding-bottom: 0px;
   width: 100%;
   position: relative;

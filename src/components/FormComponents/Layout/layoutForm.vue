@@ -17,19 +17,13 @@
         class="close"
         @click="close(index)">x</span>
     </div>
-    <p class="btn-box">
-      <el-button
-        v-if="subName"
-        @click="validateForm"
-      >{{subName}}</el-button>
-    </p>
   </div>
 </template>
 
 <script>
-import FormComponents from './form'
+import FormComponents from './form.vue'
 export default {
-  name: 'FormCom',
+  name: 'LayoutForm',
   components: {
     FormComponents
   },
@@ -115,6 +109,5 @@ export default {
   text-align: center;
   cursor: pointer;
   font-size: 12px;
-  z-index: 101;
 }
 </style>
