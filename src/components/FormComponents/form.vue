@@ -12,6 +12,7 @@
 <script>
 import ImButton from './components/button'
 import ImRadio from './components/radio'
+import ImRadioGroup from './components/radioGroup'
 import ImCheckBox from './components/checkBox'
 import ImInput from './components/input'
 import ImInputNumber from './components/inputNumber'
@@ -32,6 +33,7 @@ export default {
     ImInput,
     ImButton,
     ImRadio,
+    ImRadioGroup,
     ImCheckBox,
     ImInputNumber,
     ImSelect,

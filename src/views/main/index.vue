@@ -85,6 +85,7 @@ export default {
         // { name: '确定', type: 'Button', props: { type: 'big' } },
         { attr: 'title', name: '请输入', value: '', type: 'Input', props: { placeholder: '请输入1或2试试', rules: { required: true, message: '请输入', target: 'blur' } } },
         { name: '单选', value: '', type: 'Radio', props: { rules: { required: true, message: '请选择' }, border: true }, options: [{ key: '1', value: '男' }, { key: '2', value: '女' }] },
+        { name: '单项选择', value: '', type: 'RadioGroup', props: { rules: { required: true, message: '请选择' }, border: true }, options: [{ key: '1', value: '选项一' }, { key: '2', value: '选项二' }, { key: '3', value: '选项三' }] },
         { name: '多选', value: [], type: 'CheckBox', props: { rules: { required: true, message: '请选择' }, border: true }, options: ['男', '女'] },
         { name: '数量', value: '', type: 'InputNumber', props: { placeholder: '请输入', rules: { required: true } } },
         { name: '单项选题', value: '', type: 'Select', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } }, options: [{ key: '1', value: '男' }, { key: '2', value: '女' }] },
