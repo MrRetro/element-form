@@ -12,47 +12,11 @@
   </div>
 </template>
 <script>
-import ImButton from './components/button'
-import ImRadio from './components/radio'
-import ImRadioGroup from './components/radioGroup'
-import ImCheckBox from './components/checkBox'
-import ImInput from './components/input'
-import ImInputNumber from './components/inputNumber'
-import ImSelect from './components/select'
-import ImCascader from './components/cascader'
-import ImSwitch from './components/switch'
-import ImSlider from './components/slider'
-import ImTimePicker from './components/timePicker'
-import ImDatePicker from './components/datePicker'
-import ImUpload from './components/upload'
-import ImRate from './components/rate'
-import ImColorPicker from './components/colorPicker'
-import ImTransfer from './components/transfer'
-import ImLayout from './components/layout'
-import ImLine from './components/line'
+import component from './components/index'
 
 export default {
   name: 'FormComponent',
-  components: {
-    ImInput,
-    ImButton,
-    ImRadio,
-    ImRadioGroup,
-    ImCheckBox,
-    ImInputNumber,
-    ImSelect,
-    ImCascader,
-    ImSwitch,
-    ImSlider,
-    ImTimePicker,
-    ImDatePicker,
-    ImUpload,
-    ImRate,
-    ImColorPicker,
-    ImTransfer,
-    ImLayout,
-    ImLine
-  },
+  components: component,
   props: {
     name: String,
     value: [String, Number, Array, Boolean, Date],

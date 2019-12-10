@@ -1,39 +1,21 @@
-import ImButton from './button'
-import ImRadio from './radio'
-import ImRadioGroup from './radioGroup'
-import ImCheckBox from './checkBox'
-import ImInput from './input'
-import ImInputNumber from './inputNumber'
-import ImSelect from './select'
-import ImCascader from './cascader'
-import ImSwitch from './switch'
-import ImSlider from './slider'
-import ImTimePicker from './timePicker'
-import ImDatePicker from './datePicker'
-import ImUpload from './upload'
-import ImRate from './rate'
-import ImColorPicker from './colorPicker'
-import ImTransfer from './transfer'
-import ImLayout from './layout'
-import ImLine from './line'
-
-export default {
-  ImInput,
-  ImButton,
-  ImRadio,
-  ImRadioGroup,
-  ImCheckBox,
-  ImInputNumber,
-  ImSelect,
-  ImCascader,
-  ImSwitch,
-  ImSlider,
-  ImTimePicker,
-  ImDatePicker,
-  ImUpload,
-  ImRate,
-  ImColorPicker,
-  ImTransfer,
-  ImLayout,
-  ImLine
+// 获取组件名称
+function getModuleName (name) {
+  return name.substring(name.indexOf('/') + 1, name.indexOf('/index'))
 }
+// 首字母大写
+function UpperFirst (name) {
+  return name.charAt(0).toUpperCase() + name.slice(1)
+}
+const context = require.context('./', true, /[\w\W]*index.vue/)
+const keys = context.keys()
+const modules = Object.create({})
+for (let i = 0; i < keys.length; i += 1) {
+  modules[getModuleName(keys[i])] = keys[i]
+}
+
+const obj = Object.create({})
+Object.keys(modules).map(v => {
+  obj[`Im${UpperFirst(v)}`] = () => import(`${modules[v]}`)
+})
+
+export default obj
