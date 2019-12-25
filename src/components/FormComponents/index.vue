@@ -3,6 +3,7 @@
     <div
       v-for="(item,index) in newForm"
       :key="index"
+      :class="{'is-config':isShowConfig}"
       class="component"
     >
       <FormComponents
@@ -16,24 +17,55 @@
         v-if="isDelete"
         class="close"
         @click="close(index)">x</span>
+
+      <div
+        v-if="typeParent !=='YourselfDiy' && item.type !=='YourselfDiy' && isShowConfig"
+        class="config-box"
+      >
+        <span>参数配置</span>
+        <table>
+          <tbody>
+            <tr><td>key值</td><td><el-input v-model="item.attr"/></td></tr>
+            <tr><td>名称</td><td><el-input v-model="item.name"/></td></tr>
+            <tr v-if="item.options">
+              <td style="text-align:center;vertical-align:middle;">选项</td>
+              <td>
+                <SelectContentEdit
+                  :value="item.options"
+                />
+              </td>
+            </tr>
+            <tr><td>必填</td><td><el-switch v-model="item.props.rules.required"/></td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <p class="btn-box">
+    <p
+      v-if="subName"
+      class="btn-box">
       <el-button
-        v-if="subName"
         @click="validateForm"
-      >{{subName}}</el-button>
+      >{{ subName }}</el-button>
     </p>
   </div>
 </template>
 
 <script>
-import FormComponents from './form'
+import SelectContentEdit from './SelectContentEdit/index.vue'
+import FormComponents from './form.vue'
+
 export default {
   name: 'FormCom',
   components: {
+    SelectContentEdit,
     FormComponents
   },
   props: {
+    isShowConfig: {
+      type: Boolean,
+      default: false
+    },
+    typeParent: String,
     isDelete: {
       type: Boolean,
       default: false
@@ -42,6 +74,11 @@ export default {
     form: {
       type: Array,
       default: () => []
+    }
+  },
+  data () {
+    return {
+      newForm: this.form
     }
   },
   watch: {
@@ -53,15 +90,11 @@ export default {
       immediate: true
     }
   },
-  data () {
-    return {
-      newForm: this.form
-    }
-  },
   methods: {
     onInput (target, index, item) {
       this.newForm[index].value = target
 
+      this.$emit('onForm', this.newForm)
       // 回调通知组件变更
       if (item) {
         this.$emit('onAttr', item)
@@ -103,9 +136,18 @@ export default {
 .component{
   position: relative;
 }
+.component .is-config{
+  display: flex;
+  justify-content: space-between;
+}
+.component >>> .form{
+  display: flex;
+  flex: 1;
+}
 .close{
   position: absolute;
   top: -6px;
+  right: 0px;
   background-color: #F56C6C;
   border-radius: 50%;
   width: 20px;
@@ -117,4 +159,14 @@ export default {
   font-size: 12px;
   z-index: 101;
 }
+.form >>> .form-input{
+  width: initial;
+}
+  .config-box{
+    /*position: absolute;*/
+    /*top: -20px;*/
+    /*right: 0px;*/
+    opacity: .5;
+    transform: scale(.8);
+  }
 </style>

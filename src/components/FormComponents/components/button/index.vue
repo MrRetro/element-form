@@ -1,11 +1,10 @@
 <template>
-  <div>
-    <el-button
-      v-bind="$attrs.props"
-    >
-      {{ $attrs.name }}
-    </el-button>
-  </div>
+  <el-button
+    v-bind="$attrs.props"
+    class="btn"
+  >
+    {{ $attrs.name }}
+  </el-button>
 </template>
 
 <script>
@@ -54,17 +53,7 @@ export default {
 </script>
 
 <style scoped>
-.form-input{
-  display: flex;
-  flex-direction: row;
-}
-  .item{
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    margin-bottom: 20px;
-  }
-.isRequired{
-  padding-left: 10px;
+.btn{
+  width: auto !important;
 }
 </style>

@@ -11,10 +11,21 @@
         prop="newValue"
         class="item"
       >
-        <el-transfer
-          v-bind="$attrs.props"
+
+        <FileDialog
           v-model="form.newValue"
-        />
+          width="100%"
+          height="100%"
+          type="doc"
+          preview
+        >
+          <span
+            slot="placeholder"
+            class="layout-placeholder"
+          >
+            选择Word
+          </span>
+        </FileDialog>
       </el-form-item>
     </el-form>
   </div>
@@ -22,14 +33,14 @@
 
 <script>
 export default {
-  name: 'ImTransfer',
+  name: 'ImSelectDoc',
   props: {
-    value: [String, Array]
+    value: [String, Number]
   },
   data () {
     return {
       form: {
-        newValue: this.$attrs.value
+        newValue: this.value
       }
     }
   },
@@ -66,17 +77,24 @@ export default {
 </script>
 
 <style scoped>
-.form-input{
-  display: flex;
-  flex-direction: row;
-}
+  .form-input{
+    display: flex;
+    flex-direction: row;
+  }
   .item{
     display: flex;
     flex-direction: row;
     flex: 1;
     margin-bottom: 20px;
   }
-.isRequired{
-  padding-left: 10px;
-}
+  .item >>> .app-qiniu{
+    width: 16vw;
+    height: 40px;
+  }
+  .item >>> .iconfont{
+    font-size: 22px;
+  }
+  .isRequired{
+    padding-left: 10px;
+  }
 </style>

@@ -1,12 +1,12 @@
 <template>
   <div class="form">
     <component
-      style="width: 100%"
       ref="formItem"
       :is="comp"
       :attrs="$attrs"
       v-bind="$props"
       v-model="value"
+      style="width: 100%"
       @onInput="onInput"
     />
   </div>
@@ -19,7 +19,7 @@ export default {
   components: component,
   props: {
     name: String,
-    value: [String, Number, Array, Boolean, Date],
+    value: [String, Number, Array, Boolean, Date, Object],
     type: String,
     props: Object,
     index: [Number, String],

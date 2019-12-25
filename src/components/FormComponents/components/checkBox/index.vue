@@ -15,10 +15,11 @@
           v-model="form.newValue"
         >
           <el-checkbox
-            v-for="(item,index) in $attrs.options"
-            :label="item"
-            :key="index"
-            v-bind="$attrs.props"/>
+            v-for="(item) in $attrs.options"
+            :label="`${item.value}`"
+            :key="item.key"
+            v-bind="$attrs.props"
+          />
         </el-checkbox-group>
       </el-form-item>
     </el-form>

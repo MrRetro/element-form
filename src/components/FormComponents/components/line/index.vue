@@ -1,16 +1,16 @@
 <template>
   <div class="line-box">
     <p
-      class="line"
       :class="{
         left:newPosition === 'left',
         center:newPosition === 'center',
         right:newPosition === 'right',
       }"
+      class="line"
     >
       <span
         class="name"
-      >{{$attrs.name}}</span>
+      >{{ $attrs.name }}</span>
     </p>
   </div>
 </template>
@@ -85,6 +85,7 @@ export default {
 }
 .line.center{
   overflow-y: initial;
+  text-align: center;
 }
 .line.center .name{
   position: relative;

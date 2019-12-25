@@ -70,12 +70,15 @@ export default {
   display: flex;
   flex-direction: row;
 }
-  .item{
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    margin-bottom: 20px;
-  }
+.item{
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  margin-bottom: 20px;
+}
+.item >>> .el-form-item__content{
+  /*width: 60%;*/
+}
 .isRequired{
   padding-left: 10px;
 }

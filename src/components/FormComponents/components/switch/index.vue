@@ -13,8 +13,7 @@
       >
         <el-switch
           v-bind="$attrs.props"
-          v-model="form.newValue">
-        </el-switch>
+          v-model="form.newValue"/>
       </el-form-item>
     </el-form>
   </div>
@@ -75,6 +74,10 @@ export default {
     flex-direction: row;
     flex: 1;
     margin-bottom: 20px;
+  }
+  .item >>> .el-form-item__content{
+    align-items: center;
+    justify-content: center;
   }
 .isRequired{
   padding-left: 10px;

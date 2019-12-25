@@ -22,6 +22,7 @@
 
 <script>
 import FormComponents from './form.vue'
+
 export default {
   name: 'LayoutForm',
   components: {
@@ -38,6 +39,11 @@ export default {
       default: () => []
     }
   },
+  data () {
+    return {
+      newForm: this.form
+    }
+  },
   watch: {
     form: {
       handler (vl) {
@@ -45,11 +51,6 @@ export default {
       },
       deep: true,
       immediate: true
-    }
-  },
-  data () {
-    return {
-      newForm: this.form
     }
   },
   methods: {

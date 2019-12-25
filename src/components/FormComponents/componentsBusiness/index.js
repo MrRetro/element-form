@@ -1,6 +1,3 @@
-// 业务组件
-import Business from '../componentsBusiness/index'
-
 // 获取组件名称
 function getModuleName (name) {
   return name.substring(name.indexOf('/') + 1, name.indexOf('/index'))
@@ -21,7 +18,4 @@ Object.keys(modules).map((v) => {
   obj[`Im${UpperFirst(v)}`] = () => import(`${modules[v]}`)
 })
 
-export default {
-  ...obj,
-  ...Business
-}
+export default obj

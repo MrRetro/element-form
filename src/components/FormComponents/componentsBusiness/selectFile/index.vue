@@ -11,10 +11,22 @@
         prop="newValue"
         class="item"
       >
-        <el-transfer
-          v-bind="$attrs.props"
+        <app-qiniu
           v-model="form.newValue"
-        />
+          token-url="/resource/upload_token"
+          token-mode="name"
+          width="100%"
+          height="100%"
+          type="animation"
+          preview
+        >
+          <span
+            slot="placeholder"
+            class="state-primary-icon"
+          >
+            选择需要上传游戏的压缩包
+          </span>
+        </app-qiniu>
       </el-form-item>
     </el-form>
   </div>
@@ -22,14 +34,14 @@
 
 <script>
 export default {
-  name: 'ImTransfer',
+  name: 'ImSelectFile',
   props: {
-    value: [String, Array]
+    value: [String, Number]
   },
   data () {
     return {
       form: {
-        newValue: this.$attrs.value
+        newValue: this.value
       }
     }
   },
@@ -70,12 +82,20 @@ export default {
   display: flex;
   flex-direction: row;
 }
-  .item{
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    margin-bottom: 20px;
-  }
+.item{
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  margin-bottom: 20px;
+}
+.item >>> .el-form-item__content{
+  width: 20vw;
+  height: 40px;
+}
+
+.item >>> .iconfont{
+  font-size: 22px;
+}
 .isRequired{
   padding-left: 10px;
 }

@@ -17,7 +17,7 @@ export default {
   components: component,
   props: {
     name: String,
-    value: [String, Number, Array, Boolean, Date],
+    value: [String, Number, Array, Boolean, Date, Object],
     type: String,
     props: Object,
     index: [Number, String],

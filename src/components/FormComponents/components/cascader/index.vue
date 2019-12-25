@@ -51,7 +51,7 @@ export default {
   watch: {
     value: {
       handler (vl) {
-        this.form.newValue = vl
+        this.form.newValue = typeof vl === 'string' ? vl.split(',') : vl
       },
       deep: true,
       immediate: true

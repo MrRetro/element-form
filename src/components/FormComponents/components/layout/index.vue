@@ -1,9 +1,8 @@
 <template>
   <div>
     <LayoutForm
-      ref="layoutForm"
-      class="layout-box"
       v-if="newOptions && newOptions.length>0"
+      ref="layoutForm"
       :class="{
         left:newPosition === 'left',
         center:newPosition === 'center',
@@ -12,6 +11,7 @@
       }"
       :key="Math.random()"
       :form="newOptions"
+      class="layout-box"
     />
   </div>
 </template>
@@ -19,6 +19,7 @@
 <script>
 
 import LayoutForm from '../../Layout/layoutForm.vue'
+
 export default {
   name: 'ImLayout',
   components: {
@@ -95,15 +96,16 @@ export default {
 .layout-box.justify >>> .component{
   width: 50%;
   margin-left: 0px;
+  margin-right: 0px;
 }
 .layout-box >>> .component{
-  margin-left: 30px;
+  margin-right: 30px;
 }
 .layout-box >>> .component:nth-child(1){
   margin-left: 0px;
 }
 .layout-box.right >>> .component{
-  margin-right: 30px;
-  margin-left: 0px;
+  margin-right: 0px;
+  margin-left: 30px;
 }
 </style>

@@ -6,36 +6,24 @@
       class="form-input">
       <el-form-item
         :label="$attrs.name"
-        :rules="$attrs.props.rules"
-        :class="{isRequired: !isRequired}"
         prop="newValue"
         class="item"
-      >
-        <el-transfer
-          v-bind="$attrs.props"
-          v-model="form.newValue"
-        />
-      </el-form-item>
+      />
     </el-form>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ImTransfer',
+  name: 'ImTitle',
   props: {
-    value: [String, Array]
+    value: [String, Number]
   },
   data () {
     return {
       form: {
-        newValue: this.$attrs.value
+        newValue: this.value
       }
-    }
-  },
-  computed: {
-    isRequired () {
-      return this.$attrs.props.rules && this.$attrs.props.rules.required
     }
   },
   watch: {
@@ -70,12 +58,19 @@ export default {
   display: flex;
   flex-direction: row;
 }
-  .item{
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    margin-bottom: 20px;
-  }
+.form-input >>> .el-form-item__label{
+  font-weight: bold;
+  color: #323232;
+}
+.item{
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  margin-bottom: 20px;
+}
+.item >>> .el-form-item__content{
+  /*width: 60%;*/
+}
 .isRequired{
   padding-left: 10px;
 }

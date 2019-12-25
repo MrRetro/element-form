@@ -11,10 +11,21 @@
         prop="newValue"
         class="item"
       >
-        <el-transfer
-          v-bind="$attrs.props"
+
+        <FileDialog
           v-model="form.newValue"
-        />
+          width="100%"
+          height="100%"
+          type="image"
+          preview
+        >
+          <span
+            slot="placeholder"
+            class="layout-placeholder"
+          >
+            选择图片
+          </span>
+        </FileDialog>
       </el-form-item>
     </el-form>
   </div>
@@ -22,14 +33,14 @@
 
 <script>
 export default {
-  name: 'ImTransfer',
+  name: 'ImSelectImage',
   props: {
-    value: [String, Array]
+    value: [String, Number]
   },
   data () {
     return {
       form: {
-        newValue: this.$attrs.value
+        newValue: this.value
       }
     }
   },
@@ -75,6 +86,10 @@ export default {
     flex-direction: row;
     flex: 1;
     margin-bottom: 20px;
+  }
+  .item >>> .app-qiniu{
+    width: 16vw;
+    height: 40px;
   }
 .isRequired{
   padding-left: 10px;
