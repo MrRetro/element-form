@@ -70,9 +70,21 @@ export default {
     form: {
       handler (vl) {
         try {
-          if (this.value && this.value.length > 0 && JSON.stringify(JSON.parse(this.value)) !== JSON.stringify(JSON.parse(this.oldValue))) {
+          let str = 0
+          if (typeof vl === 'string') {
+            str = vl
+          } else if (typeof vl === 'object') {
+            str = JSON.stringify(vl)
+          }
+          let oldStr = 0
+          if (typeof this.oldValue === 'string') {
+            oldStr = this.oldValue
+          } else if (typeof this.oldValue === 'object') {
+            oldStr = JSON.stringify(this.oldValue)
+          }
+          if (str !== oldStr) {
+            this.oldValue = typeof vl === 'object' ? JSON.parse(JSON.stringify(vl)) : vl
             this.value = formatJson(this.form)
-            this.oldValue = this.value
           }
         } catch (e) {
           console.log(e)
