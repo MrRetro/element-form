@@ -12,8 +12,7 @@
         class="item"
       >
 
-        <FileDialog
-          v-model="form.newValue"
+        <div
           width="100%"
           height="100%"
           type="video"
@@ -25,7 +24,7 @@
           >
             选择视频
           </span>
-        </FileDialog>
+        </div>
       </el-form-item>
     </el-form>
   </div>
@@ -87,11 +86,11 @@ export default {
     flex: 1;
     margin-bottom: 20px;
   }
-  .item >>> .app-qiniu{
+  .item >>> .div{
     width: 16vw;
     height: 40px;
   }
-  .item >>> .app-qiniu__preview-audio > .iconfont{
+  .item >>> .div__preview-audio > .iconfont{
     font-size: 22px;
   }
   .isRequired{

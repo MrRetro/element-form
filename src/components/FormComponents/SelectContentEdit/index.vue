@@ -193,7 +193,7 @@ export default {
     flex: 1;
     margin-bottom: 20px;
   }
-.item >>> .app-qiniu{
+.item >>> .div{
   width: 180px;
   height: 40px;
 }

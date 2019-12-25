@@ -12,8 +12,7 @@
         class="item"
       >
 
-        <FileDialog
-          v-model="form.newValue"
+        <div
           width="100%"
           height="100%"
           type="pdf"
@@ -25,7 +24,7 @@
           >
             选择PDF
           </span>
-        </FileDialog>
+        </div>
       </el-form-item>
     </el-form>
   </div>
@@ -87,7 +86,7 @@ export default {
     flex: 1;
     margin-bottom: 20px;
   }
-  .item >>> .app-qiniu{
+  .item >>> .div{
     width: 16vw;
     height: 40px;
   }

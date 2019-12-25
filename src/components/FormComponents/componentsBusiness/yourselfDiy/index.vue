@@ -325,7 +325,7 @@ export default {
   .select-box{
     width: 220px;
   }
-  .row .select-box >>> .app-qiniu{
+  .row .select-box >>> .div{
     width: 220px;
     height: 40px;
   }

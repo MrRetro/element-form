@@ -21,8 +21,7 @@
               <div class="row">
                 <span class="name">待机动画</span>
                 <div class="select-box">
-                  <FileDialog
-                    v-model="item.standbyAnimation"
+                  <div
                     width="100%"
                     height="100%"
                     type="animation"
@@ -34,15 +33,14 @@
                     >
                       上传素材
                     </span>
-                  </FileDialog>
+                  </div>
                   <span class="warn">--听音选图二选一、集体朗读、分组PK</span>
                 </div>
               </div>
               <div class="row">
                 <span class="name">答题动画</span>
                 <div class="select-box">
-                  <FileDialog
-                    v-model="item.answerAnimation"
+                  <div
                     width="100%"
                     height="100%"
                     type="animation"
@@ -54,15 +52,14 @@
                     >
                       上传素材
                     </span>
-                  </FileDialog>
+                  </div>
                   <span class="warn">--听音选图二选一、集体朗读、分组PK、抢答类</span>
                 </div>
               </div>
               <div class="row">
                 <span class="name">正确动画</span>
                 <div class="select-box">
-                  <FileDialog
-                    v-model="item.correctAnimation"
+                  <div
                     width="100%"
                     height="100%"
                     type="animation"
@@ -74,15 +71,14 @@
                     >
                       上传素材
                     </span>
-                  </FileDialog>
+                  </div>
                   <span class="warn">--听音选图二选一、集体朗读、分组PK、抢答类</span>
                 </div>
               </div>
               <div class="row">
                 <span class="name">错误动画</span>
                 <div class="select-box">
-                  <FileDialog
-                    v-model="item.errorAnimation"
+                  <div
                     width="100%"
                     height="100%"
                     type="animation"
@@ -94,15 +90,14 @@
                     >
                       上传素材
                     </span>
-                  </FileDialog>
+                  </div>
                   <span class="warn">--听音选图二选一、集体朗读、分组PK</span>
                 </div>
               </div>
               <div class="row">
                 <span class="name">人物动画</span>
                 <div class="select-box">
-                  <FileDialog
-                    v-model="item.characterAnimation"
+                  <div
                     width="100%"
                     height="100%"
                     type="animation"
@@ -114,15 +109,14 @@
                     >
                       上传素材
                     </span>
-                  </FileDialog>
+                  </div>
                   <span class="warn">--听音选图二选一、集体朗读、分组PK、抢答类</span>
                 </div>
               </div>
               <div class="row">
                 <span class="name">人物动画</span>
                 <div class="select-box">
-                  <FileDialog
-                    v-model="item.characterAnimation"
+                  <div
                     width="100%"
                     height="100%"
                     type="animation"
@@ -134,15 +128,14 @@
                     >
                       上传素材
                     </span>
-                  </FileDialog>
+                  </div>
                   <span class="warn">--听音选图二选一、集体朗读、分组PK、抢答类</span>
                 </div>
               </div>
               <div class="row">
                 <span class="name">奖励页头像框</span>
                 <div class="select-box">
-                  <FileDialog
-                    v-model="item.headFrame"
+                  <div
                     width="100%"
                     height="100%"
                     type="image"
@@ -154,7 +147,7 @@
                     >
                       上传素材
                     </span>
-                  </FileDialog>
+                  </div>
                   <span class="warn">--听音选图二选一、集体朗读、分组PK、抢答类</span>
                 </div>
               </div>
@@ -361,7 +354,7 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.row .select-box >>> .app-qiniu{
+.row .select-box >>> .div{
   width: 220px;
   height: 40px;
 }

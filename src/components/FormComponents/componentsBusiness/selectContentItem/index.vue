@@ -19,8 +19,7 @@
             <span>选项{{ letter[index] }}</span>
             <div class="content">
               <p class="sel-box">
-                <FileDialog
-                  v-model="item.url"
+                <div
                   width="100%"
                   height="100%"
                   type="image"
@@ -32,7 +31,7 @@
                   >
                     选择图片
                   </span>
-                </FileDialog>
+                </div>
                 <el-button
                   v-if="index>0"
                   type="danger"
@@ -212,7 +211,7 @@ export default {
     flex: 1;
     margin-bottom: 20px;
   }
-.item >>> .app-qiniu{
+.item >>> .div{
   width: 180px;
   height: 40px;
 }

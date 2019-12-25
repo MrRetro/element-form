@@ -70,7 +70,7 @@ export default {
     form: {
       handler (vl) {
         try {
-          if (JSON.stringify(JSON.parse(this.value)) !== JSON.stringify(JSON.parse(this.oldValue))) {
+          if (this.value && this.value.length > 0 && JSON.stringify(JSON.parse(this.value)) !== JSON.stringify(JSON.parse(this.oldValue))) {
             this.value = formatJson(this.form)
             this.oldValue = this.value
           }
@@ -83,6 +83,7 @@ export default {
     }
   },
   created () {
+    window._vue_1 = this
     this.value = formatJson(this.form)
     this.oldValue = this.value
     this.initForm = JSON.parse(JSON.stringify(this.form))

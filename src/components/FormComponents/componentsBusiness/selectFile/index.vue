@@ -11,8 +11,7 @@
         prop="newValue"
         class="item"
       >
-        <app-qiniu
-          v-model="form.newValue"
+        <div
           token-url="/resource/upload_token"
           token-mode="name"
           width="100%"
@@ -26,7 +25,7 @@
           >
             选择需要上传游戏的压缩包
           </span>
-        </app-qiniu>
+        </div>
       </el-form-item>
     </el-form>
   </div>
