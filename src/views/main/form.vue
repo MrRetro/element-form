@@ -1,47 +1,56 @@
 <template>
   <div class="form-box">
-    <div class="box left">
-      <div class="menus">
-        <p class="title">基础组件</p>
-        <p
-          v-for="(item,key) in initForm"
-          v-if="!item.status"
-          :key="key"
-          :class="{active:key===selected}"
+    <div class="box">
+      <div class="pad one">
+        <textarea
+          v-model="value"
+          class="left"
+          @input="onChange"/>
+      </div>
+      <div class="btns two">
+        <el-button
           size="small"
           class="btn"
-          @click="addComp(key)"
-        >{{ item.name }}</p>
-        <p class="title">业务组件</p>
-        <p
+          type="danger"
+          @click="clearAll"
+        >清除</el-button>
+        业务组件
+        <el-button
           v-for="(item,key) in initForm"
           v-if="item.status"
           :key="key"
-          :class="{active:key===selected}"
           size="small"
           class="btn"
           @click="addComp(key)"
-        >{{ item.name }}</p>
+        >{{ item.name }}</el-button>
+      </div>
+      <div class="btns">
+        <el-button
+          size="small"
+          class="btn"
+          type="danger"
+          @click="clearAll"
+        >清除</el-button>
+        基础组件
+        <el-button
+          v-for="(item,key) in initForm"
+          v-if="!item.status"
+          :key="key"
+          size="small"
+          class="btn"
+          @click="addComp(key)"
+        >{{ item.name }}</el-button>
       </div>
     </div>
-    <div class="box right">
+    <div class="box">
       <div class="pad">
         <FormCom
           :form="form"
-          :sub-name="Object.keys(form[0]).includes('value')?'提交校验表单':''"
+          :is-delete="true"
+          sub-name="提交校验表单"
           @onAttr="onAttr"
           @onDelete="onDelete"
         />
-
-        <div class="code">
-          <el-input
-            type="textarea"
-            autosize
-            resize="none"
-            v-model="value"
-            class="left"
-            @input="onChange"/>
-        </div>
       </div>
     </div>
   </div>
@@ -53,7 +62,7 @@ import {formatJson} from '../../utils/common'
 import configForm from '../../components/FormComponents/configForm'
 
 export default {
-  name: 'index',
+  name: 'form',
   components: {
     FormCom
   },
@@ -89,8 +98,7 @@ export default {
     window._vue_1 = this
     this.value = formatJson(this.form)
     this.oldValue = this.value
-    this.initForm = JSON.parse(JSON.stringify(configForm))
-    this.addComp(13)
+    this.initForm = JSON.parse(JSON.stringify(this.form))
   },
   data () {
     const generateData = _ => {
@@ -105,12 +113,11 @@ export default {
       return data
     }
     return {
-      selected: -1, // 当前被选中的key
       value: [],
       oldValue: [], // 历史数据
       initForm: [], // 初始化数据
       data: generateData(),
-      form: []
+      form: configForm
     }
   },
   methods: {
@@ -143,9 +150,8 @@ export default {
     },
     // 添加组件
     addComp (index) {
-      this.selected = index
       try {
-        let newForm = []
+        let newForm = JSON.parse(this.value)
         newForm.push(this.initForm[index])
         this.value = formatJson(newForm)
         this.form = JSON.parse(this.value)
@@ -170,19 +176,6 @@ export default {
 </script>
 
 <style scoped>
-  ::-webkit-scrollbar {/*滚动条整体样式*/
-    width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
-    height: 6px;
-  }
-  ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-    border-radius: 5px;
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    background: #f0f0f0;
-  }
-  ::-webkit-scrollbar-track {/*滚动条里面轨道*/
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    border-radius: 0;
-  }
   .box >>> .content-box, .box >>> .content-box2{
     display: flex;
     flex-direction: column;
@@ -200,12 +193,6 @@ export default {
     overflow-y: auto;
     position: relative;
   }
-  .box.left{
-    width: 240px;
-  }
-  .box.right{
-    width: calc(100% - 240px);
-  }
   .btns{
     display: flex;
     flex-direction: column;
@@ -219,23 +206,13 @@ export default {
     right: 106px;
   }
   .btn{
+    width: 100px;
     margin-left: 0px;
     margin-right: 10px;
-    color: #444;
-    font-size: 14px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-weight: 400;
-    cursor: pointer;
-    line-height: 30px;
-    transition: color .2s linear;
-  }
-  .btn:hover,.btn.active{
-    color: #409eff;
   }
   .pad{
     padding: 20px;
+    /*padding-right: 0px;*/
     padding-bottom: 0px;
     width: 100%;
     position: relative;
@@ -246,8 +223,8 @@ export default {
   .pad.one{
     padding-top: 0px;
   }
-  .code .left{
-    width: 100%;
+  .left{
+    width: calc(50vw - 20px);
     height: 100%;
     resize: none;
     outline: none;
@@ -261,22 +238,5 @@ export default {
     top: 0;
     bottom: 0;
     border-right: 1px solid #eee;
-  }
-  .code{
-    height: 500px;
-  }
-
-  .menus{
-    width: 100%;
-    text-align: left;
-    padding-left: 20px;
-  }
-
-  .title{
-    width: 100%;
-    font-size: 12px;
-    color: #999;
-    line-height: 26px;
-    margin-top: 15px;
   }
 </style>

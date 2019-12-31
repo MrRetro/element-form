@@ -44,6 +44,7 @@
                 size="small"
                 @click="handleDelete(index)"
               >删除</el-button>
+              <div class="zhezhao"/>
             </div>
           </div>
           <div class="view">
@@ -344,5 +345,14 @@ export default {
     position: absolute;
     top: 8px;
     right: 22px;
+    z-index: 11;
+  }
+  .comp-box .zhezhao{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
   }
 </style>
