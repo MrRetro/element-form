@@ -1,6 +1,9 @@
 <template>
   <div class="form-box">
-    <div class="box left">
+    <div class="open" @click="open(false)">展开</div>
+    <div class="box left"
+         :class="{'open':isOpen}"
+    >
       <div class="menus">
         <p class="title">基础组件</p>
         <p
@@ -24,7 +27,8 @@
         >{{ item.name }}</p>
       </div>
     </div>
-    <div class="box right">
+    <div class="box right"
+         @click="open(true)">
       <div class="pad">
         <FormCom
           :form="form"
@@ -105,6 +109,7 @@ export default {
       return data
     }
     return {
+      isOpen: false, // 是否打开菜单
       selected: -1, // 当前被选中的key
       value: [],
       oldValue: [], // 历史数据
@@ -114,6 +119,13 @@ export default {
     }
   },
   methods: {
+    open (state) {
+      if (state) {
+        this.isOpen = false
+      } else {
+        this.isOpen = true
+      }
+    },
     onChange (e) {
       try {
         this.form = JSON.parse(this.value)
@@ -152,6 +164,7 @@ export default {
       } catch (e) {
         console.log(e)
       }
+      this.open(true)
     },
     onDelete (index) {
       try {
@@ -170,6 +183,34 @@ export default {
 </script>
 
 <style scoped>
+  .open{
+    position: absolute;
+    width: 50px;
+    box-shadow: 0 0 1px 1px #eee;
+    display: none;
+    z-index: 10;
+    background-color: white;
+  }
+  @media screen and (max-width: 700px) {
+    .open{
+      display: inline-block;
+    }
+    .box.left {
+      position: fixed;
+      width: 200px !important;
+      top: 0px;
+      left: -200px;
+      z-index: 999;
+      background-color: white;
+      transition: all .2s linear;
+    }
+    .box.left.open{
+      left: 0px;
+    }
+    .box.right {
+      width: 100% !important;
+    }
+  }
   ::-webkit-scrollbar {/*滚动条整体样式*/
     width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
     height: 6px;
