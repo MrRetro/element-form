@@ -307,6 +307,10 @@ export default {
     height: 500px;
   }
 
+  .code >>> textarea{
+    box-shadow: 0 2px 12px 0px rgba(0,0,0,.1);
+  }
+
   .menus{
     width: 100%;
     text-align: left;

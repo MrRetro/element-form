@@ -18,7 +18,6 @@ export const formatJson = function (msg) {
     if (rep === text) { jsonStr += '       ' } else {
       jsonStr += text
     }
-    if (i === str.length - 2) { jsonStr += '\r\n' }
   }
   return jsonStr
 }

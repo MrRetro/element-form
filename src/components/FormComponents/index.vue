@@ -133,6 +133,9 @@ export default {
   display: flex;
   padding: 20px;
 }
+.btn-box >>> .el-button{
+  box-shadow: 0 2px 12px 0px rgba(0,0,0,.1);
+}
 .component{
   position: relative;
 }
@@ -163,10 +166,10 @@ export default {
   width: initial;
 }
   .config-box{
-    /*position: absolute;*/
-    /*top: -20px;*/
-    /*right: 0px;*/
     opacity: .5;
     transform: scale(.8);
   }
+.component >>> .el-form-item__label{
+  min-width: 65px;
+}
 </style>
