@@ -1,5 +1,26 @@
 export default [
   {
+    name: '通用(右)',
+    value: '',
+    type: 'YourselfDiyRight',
+    props: {},
+    status: '1'
+  },
+  {
+    name: '通用(中)',
+    value: '',
+    type: 'YourselfDiyCenter',
+    props: {},
+    status: '1'
+  },
+  {
+    name: '通用(左)',
+    value: '',
+    type: 'YourselfDiyLeft',
+    props: {},
+    status: '1'
+  },
+  {
     name: '通用',
     value: '',
     type: 'YourselfDiy',

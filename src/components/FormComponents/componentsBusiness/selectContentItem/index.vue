@@ -18,7 +18,7 @@
             class="box">
             <span>选项{{ letter[index] }}</span>
             <div class="content">
-              <p class="sel-box">
+              <div class="sel-box">
                 <div
                   width="100%"
                   height="100%"
@@ -39,7 +39,7 @@
                   class="del"
                   @click="handleDelete(index)"
                 >删除</el-button>
-              </p>
+              </div>
               <el-input
                 v-model="item.value"
                 placeholder="I am fine."

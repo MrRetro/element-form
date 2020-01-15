@@ -15,13 +15,14 @@
           <div
             v-for="(item1,index) in form.newValue.layout"
             :key="'lay'+index+Math.random()"
+            class="box2"
           >
             <el-select
               v-if="!item1.config"
               :filterable="true"
               v-model="item1.type"
               size="small"
-              placeholder="请选择(不会被绘制)"
+              placeholder="请选择"
               class="select-box"
               @change="handleChange(index,item1.type)">
               <el-option
@@ -66,6 +67,7 @@
       :visible.sync="dialogVisible"
       :title="preTitle"
       :append-to-body="true"
+      :class="{'pre-box': preTitle === '预览'}"
       width="920px"
       @close="close">
       <FormComp
@@ -89,7 +91,7 @@ import configForm from '../../configForm'
 import FormComp from '../../index.vue'
 
 export default {
-  name: 'ImYourselfDiy',
+  name: 'ImYourselfDiyLeft',
   components: {
     FormComp
   },
@@ -283,6 +285,13 @@ export default {
   .content-box2{
     position: relative;
     min-width: 500px;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+  }
+  .content-box2 .box2{
+    margin: 0px 6px;
   }
   .content-box2 .box:last-of-type .content{
     margin-bottom: 0px;
@@ -290,7 +299,7 @@ export default {
   .content-box2 .view{
     display: inline-block;
     position: absolute;
-    top: 0px;
+    top: -30px;
     right: 0vw;
   }
   .form-input{
@@ -324,7 +333,7 @@ export default {
     font-size: 12px;
   }
   .select-box{
-    width: 220px;
+    width: 100px;
   }
   .row .select-box >>> .div{
     width: 220px;
@@ -335,7 +344,6 @@ export default {
     font-size: 22px;
   }
   .comp-box{
-    width: 660px;
     border: 2px dashed #00bfff;
     margin: 10px 0px;
     padding: 20px;
@@ -354,5 +362,13 @@ export default {
     width: 100%;
     height: 100%;
     z-index: 10;
+  }
+  .pre-box >>> .el-dialog__body>div{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .pre-box >>> .el-dialog__body .component{
+    margin-right: 20px;
   }
 </style>
