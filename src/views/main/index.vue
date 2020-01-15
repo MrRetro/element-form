@@ -94,7 +94,7 @@ export default {
     this.value = formatJson(this.form)
     this.oldValue = this.value
     this.initForm = JSON.parse(JSON.stringify(configForm))
-    this.addComp(13)
+    this.addComp(16)
   },
   data () {
     const generateData = _ => {
