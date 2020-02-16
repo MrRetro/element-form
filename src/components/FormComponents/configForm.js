@@ -1,5 +1,19 @@
 export default [
   {
+    name: '安装',
+    value: '',
+    type: 'Install',
+    props: {},
+    status: '2'
+  },
+  {
+    name: '快速上手',
+    value: '',
+    type: 'Quick',
+    props: {},
+    status: '2'
+  },
+  {
     name: '通用(右)',
     value: '',
     type: 'YourselfDiyRight',

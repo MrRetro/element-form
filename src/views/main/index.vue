@@ -5,25 +5,35 @@
          :class="{'open':isOpen}"
     >
       <div class="menus">
-        <p class="title">基础组件</p>
+        <p class="title">开发指南</p>
         <p
           v-for="(item,key) in initForm"
-          v-if="!item.status"
+          v-if="['2'].includes(item.status)"
           :key="key"
           :class="{active:key===selected}"
           size="small"
           class="btn"
-          @click="addComp(key)"
+          @click="addComp(key,item.status)"
+        >{{ item.name }}</p>
+        <p class="title">基础组件</p>
+        <p
+          v-for="(item,key) in initForm"
+          v-if="!['1','2'].includes(item.status)"
+          :key="key"
+          :class="{active:key===selected}"
+          size="small"
+          class="btn"
+          @click="addComp(key,item.status)"
         >{{ item.name }}</p>
         <p class="title">业务组件</p>
         <p
           v-for="(item,key) in initForm"
-          v-if="item.status"
+          v-if="['1'].includes(item.status)"
           :key="key"
           :class="{active:key===selected}"
           size="small"
           class="btn"
-          @click="addComp(key)"
+          @click="addComp(key,item.status)"
         >{{ item.name }}</p>
       </div>
     </div>
@@ -32,12 +42,12 @@
       <div class="pad">
         <FormCom
           :form="form"
-          :sub-name="Object.keys(form[0]).includes('value')?'提交校验表单':''"
+          :sub-name="Object.keys(form[0]).includes('value') && !isDesc?'提交校验表单':''"
           @onAttr="onAttr"
           @onDelete="onDelete"
         />
 
-        <div class="code">
+        <div class="code" v-if="!isDesc">
           <el-input
             type="textarea"
             autosize
@@ -94,7 +104,7 @@ export default {
     this.value = formatJson(this.form)
     this.oldValue = this.value
     this.initForm = JSON.parse(JSON.stringify(configForm))
-    this.addComp(16)
+    this.addComp(0, 2)
   },
   data () {
     const generateData = _ => {
@@ -115,7 +125,8 @@ export default {
       oldValue: [], // 历史数据
       initForm: [], // 初始化数据
       data: generateData(),
-      form: []
+      form: [],
+      isDesc: false // 是否开发指南
     }
   },
   methods: {
@@ -154,7 +165,8 @@ export default {
       }
     },
     // 添加组件
-    addComp (index) {
+    addComp (index, status) {
+      this.isDesc = `${status}` === '2'
       this.selected = index
       try {
         let newForm = []
