@@ -5,82 +5,42 @@
       :model="form"
       class="form-input">
       <el-form-item
-        :label="$attrs.name"
+        :label="''"
         :rules="$attrs.props.rules"
         :class="{isRequired: !isRequired}"
         prop="newValue"
         class="item"
       >
         <div class="content-box2">
-          <div
-            v-for="(item1,index) in form.newValue.layout"
-            :key="'lay'+index+Math.random()"
-          >
             <el-select
-              v-if="!item1.config"
+              v-if="!form.newValue.type"
               :filterable="true"
-              v-model="item1.type"
+              v-model="form.newValue.type"
               size="small"
-              placeholder="请选择(不会被绘制)"
+              placeholder="请选择组件"
               class="select-box"
-              @change="handleChange(index,item1.type)">
+              @change="handleChange(form.newValue.type)">
               <el-option
                 v-for="(item,index) in newOptions"
                 :key="'ops'+item.type+Math.random()"
                 :label="item.name"
                 :value="index"/>
             </el-select>
-            <div :class="{'comp-box':item1.config}">
+            <div class="comp-box" v-else>
               <FormComp
-                v-if="item1.config"
-                :key="'form'+item1.type+Math.random()"
-                :form="item1.config"
-                type-parent="YourselfDiy"
+                :key="'form'+Math.random()"
+                :form="[form.newValue]"
               />
               <el-button
-                v-if="item1.config"
                 type="danger"
                 class="del"
                 size="small"
-                @click="handleDelete(index)"
+                @click="handleDelete()"
               >删除</el-button>
-              <div class="zhezhao"/>
             </div>
-          </div>
-          <div class="view">
-            <el-button
-              type="primary"
-              size="small"
-              @click="()=>{isConfig=false;dialogVisible=true;preTitle='预览';}"
-            >预览</el-button>
-            <el-button
-              type="primary"
-              size="small"
-              @click="()=>{isConfig=true;dialogVisible=true;preTitle='设置'}"
-            >设置</el-button>
-          </div>
         </div>
       </el-form-item>
     </el-form>
-    <el-dialog
-      :visible.sync="dialogVisible"
-      :title="preTitle"
-      :append-to-body="true"
-      width="920px"
-      @close="close">
-      <FormComp
-        :form="preForm"
-        :is-show-config="isConfig"
-      />
-      <span
-        slot="footer"
-        class="dialog-footer">
-        <el-button @click="close">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="submit">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -89,7 +49,7 @@ import configForm from '../../configForm'
 import FormComp from '../../index.vue'
 
 export default {
-  name: 'ImYourselfDiy',
+  name: 'ImSelectComponents',
   components: {
     FormComp
   },
@@ -98,18 +58,13 @@ export default {
   },
   data () {
     return {
-      preTitle: '预览',
-      isConfig: false, // 是否显示配置
-      dialogVisible: false, // 是否显示弹窗
       options: configForm,
-      letter: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
       form: {
         newValue: {
-          layout: [{ type: '', config: null }]
+          type: ''
         }
       },
-      oldForm: null,
-      preForm: null // 预览数据
+      oldForm: null
     }
   },
   computed: {
@@ -120,7 +75,7 @@ export default {
     newOptions () {
       let list = this.options
       try {
-        list = list.filter(v => !['YourselfDiy', 'YourselfDiyLeft', 'YourselfDiyCenter', 'YourselfDiyRight', 'Layout', 'Line', 'Button', 'Transfer', 'Upload'].includes(v.type) && `${v.status}` !== '2')
+        list = list.filter(v => !['SelectComponent', 'YourselfDiy', 'YourselfDiyLeft', 'YourselfDiyCenter', 'YourselfDiyRight', 'Layout', 'Line', 'Button', 'Transfer', 'Upload'].includes(v.type) && `${v.status}` !== '2')
       } catch (e) {
         console.log('err==>', e)
       }
@@ -129,11 +84,11 @@ export default {
     // 获取实际可以输出的配置
     getNewConfig () {
       let arr = []
-      try {
-        arr = JSON.parse(JSON.stringify(this.form.newValue.layout)).filter(v => v.config).map(v => v.config)
-      } catch (e) {
-        console.log('获取失败==>', e)
-      }
+      // try {
+      //   arr = JSON.parse(JSON.stringify(this.form.newValue.layout)).filter(v => v.config).map(v => v.config)
+      // } catch (e) {
+      //   console.log('获取失败==>', e)
+      // }
       return arr
     }
   },
@@ -152,11 +107,11 @@ export default {
     },
     'form.newValue': {
       handler (vl) {
-        this.$emit('onInput', vl)
-        if (vl === '' && this.oldForm) {
-          this.form = this.oldForm
+        let newValue = vl
+        if (!isNaN(newValue.type)) {
+          vl = this.options[newValue.type]
         }
-        this.getNewForm()
+        this.$emit('onInput', vl)
         this.isClearVilidate()
       },
       deep: true
@@ -175,28 +130,13 @@ export default {
       })
       this.close()
     },
-    getNewForm () {
-      let arr = []
-      let newArr = []
-      try {
-        newArr = JSON.parse(JSON.stringify(this.form.newValue.layout)).filter(v => v.config)
-
-        newArr.map((v) => {
-          arr = arr.concat(v.config)
-        })
-        this.preForm = arr
-      } catch (e) {
-        console.log('获取失败==>', e)
-      }
-    },
     // 选择获取组件
-    handleChange (index, type) {
+    handleChange (type) {
       // 获取选中的表单项
-      const obj = {
-        type,
-        config: [this.newOptions[type]]
-      }
-      this.form.newValue.layout.splice(index, 1, {}, obj, {})
+      const obj = this.newOptions[type]
+      console.log(777, type)
+      console.log(7772, obj)
+      this.form.newValue = JSON.parse(JSON.stringify(obj))
     },
     // 分数只能是数字
     inputChange (value) {
@@ -240,7 +180,7 @@ export default {
     },
     // 删除
     handleDelete (index) {
-      this.form.newValue.layout.splice(index - 1, 3, {})
+      this.form.newValue = {type: ''}
     },
     // 校验表单
     formValidate () {
@@ -251,8 +191,6 @@ export default {
       this.$refs.form && this.$refs.form.clearValidate()
     },
     close () {
-      this.dialogVisible = false
-      this.isConfig = false
     }
   }
 }

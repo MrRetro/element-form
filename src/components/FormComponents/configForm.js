@@ -42,6 +42,37 @@ export default [
     status: '1'
   },
   {
+    name: '选择组件',
+    value: '',
+    type: 'SelectComponent',
+    props: {},
+    status: '1'
+  },
+  {
+    name: '自定义队列+模式',
+    value: {curMode: 0,
+      data: [
+        {
+          name: '模式0',
+          value: [
+            {
+              value: [
+                { value:
+                    [
+                      { type: '' }
+                    ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    type: 'YourselfList',
+    props: { rules: { required: true, message: '请填写', target: 'blur' }, typeName: 'word' },
+    status: '1'
+  },
+  {
     name: '评分规则模版',
     value: '',
     type: 'SelectScoreRules',
