@@ -2,7 +2,7 @@
 基于饿了么UI封装的表单
 
 ### 文档地址
-[http://element-form.o-wu.com](http://element-form.o-wu.com)
+<a href="http://element-form.o-wu.com" target="_blank">http://element-form.o-wu.com</a>
 
 ### 安装
 #### npm 安装
