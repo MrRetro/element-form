@@ -19,25 +19,69 @@
         @click="close(index)">x</span>
 
       <div
-        v-if="typeParent !=='YourselfDiy' && item.type !=='YourselfDiy' && isShowConfig"
-        class="config-box"
+        v-if="item.type === 'YourselfList' && isShowConfig"
+        style="width: 500px;"
+        class="config-box config-box2"
       >
-        <span>参数配置</span>
-        <table>
-          <tbody>
-            <tr><td>key值</td><td><el-input v-model="item.attr"/></td></tr>
-            <tr><td>名称</td><td><el-input v-model="item.name"/></td></tr>
-            <tr v-if="item.options">
-              <td style="text-align:center;vertical-align:middle;">选项</td>
-              <td>
-                <SelectContentEdit
-                  :value="item.options"
-                />
-              </td>
-            </tr>
-            <tr><td>必填</td><td><el-switch v-model="item.props.rules.required"/></td></tr>
-          </tbody>
-        </table>
+        <span style="color: #ff81a7;">{{ item.value.data[item.value.curMode].name }}</span>
+        <div class="tb-box">
+          <div>
+            <div><span>key值</span><span><el-input v-model="item.value.data[item.value.curMode].attr"/></span></div>
+            <div><span>名称</span><span><el-input v-model="item.value.data[item.value.curMode].name"/></span></div>
+          </div>
+        </div>
+        <div
+          v-for="(item1,index1) in item.value.data[item.value.curMode].value"
+          :key="'index1'+index1"
+        >
+          <span style="color: #fc8fff;">分组{{ index1 }}</span>
+          <div class="tb-box">
+            <div>
+              <div><span>key值</span><span><el-input v-model="item1.attr"/></span></div>
+              <div><span>名称</span><span><el-input v-model="item1.name"/></span></div>
+              <div>
+                <div>
+                  <div
+                    v-for="(item2,index2) in item1.value"
+                    :key="'index2'+index2"
+                  >
+                    <span style="color: #00bfff;">队列{{ index2 }}</span>
+                    <div class="tb-box">
+                      <div>
+                        <div><span>key值</span><span><el-input v-model="item2.attr"/></span></div>
+                        <div><span>名称</span><span><el-input v-model="item2.name"/></span></div>
+                        <div>
+                          <div>
+                            <div
+                              v-for="(item3,index3) in item2"
+                              :key="'index3'+index3"
+                            >
+                              <span style="color: #16b002;">组件</span>
+                              <div class="tb-box">
+                                <div>
+                                  <div><span>key值</span><span><el-input v-model="item3.attr"/></span></div>
+                                  <div><span>名称</span><span><el-input v-model="item3.name"/></span></div>
+                                  <div v-if="item3.options">
+                                    <span style="text-align:center;vertical-align:middle;">选项</span>
+                                    <span>
+                                        <SelectContentEdit
+                                          :value="item3.options"
+                                        />
+                                      </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <p
@@ -165,10 +209,17 @@ export default {
 .form >>> .form-input{
   width: initial;
 }
-  .config-box{
-    opacity: .5;
-    transform: scale(.8);
-  }
+.config-box{
+  opacity: .5;
+  transform: scale(.8);
+}
+.config-box2{
+  display: flex;
+  flex-direction: column;
+  border: 1px dashed #a1a1a1;
+  border-radius: 4px;
+  padding: 10px;
+}
 .component >>> .el-form-item__label{
   min-width: 65px;
 }

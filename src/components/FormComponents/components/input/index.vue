@@ -3,7 +3,9 @@
     <el-form
       ref="form"
       :model="form"
-      class="form-input">
+      class="form-input"
+      @submit.native.prevent
+    >
       <el-form-item
         :label="$attrs.name"
         :rules="$attrs.props.rules"

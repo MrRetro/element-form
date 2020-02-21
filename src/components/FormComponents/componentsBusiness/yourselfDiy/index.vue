@@ -66,7 +66,7 @@
       :visible.sync="dialogVisible"
       :title="preTitle"
       :append-to-body="true"
-      width="920px"
+      width="1200px"
       @close="close">
       <FormComp
         :form="preForm"

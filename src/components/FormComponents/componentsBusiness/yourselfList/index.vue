@@ -1,5 +1,31 @@
 <template>
   <div>
+    <div
+      v-if="form.newValue.isShowBtn"
+      class="select-box2">
+      <el-checkbox
+        :indeterminate="checkboxGroup.length > 0 && checkboxGroup.length < checkOptions.length"
+        v-model="checkAll"
+        border
+        size="small"
+        @change="handleCheckAllChange"
+      >全选</el-checkbox>
+      <div style="margin: 4px 0;"/>
+      <el-checkbox-group
+        v-model="checkboxGroup"
+        class="group"
+        size="small"
+        @change="handleCheckedChange"
+      >
+        <el-checkbox
+          v-for="(item,index) in checkOptions"
+          :label="item"
+          :key="index"
+          border
+        />
+
+      </el-checkbox-group>
+    </div>
     <el-form
       ref="form"
       :model="form"
@@ -28,33 +54,37 @@
             :key="'lay'+indexMode+Math.random()"
             class="mode-box">
             <div
-              v-if="indexMode"
+              v-if="indexMode && getIsShowBtn(3)"
               class="delete"
               @click="handleDeleteRow(indexMode)"
             >x</div>
-            <span class="title">模式{{ indexMode }}</span>
+            <span
+              v-if="itemMode.name"
+              class="title">{{ itemMode.name }}</span>
             <div
               v-for="(itemList,indexList) in itemMode.value"
               :key="'lay'+indexList+Math.random()"
               class="list-box">
               <div
-                v-if="indexList"
+                v-if="indexList && getIsShowBtn(2)"
                 class="delete"
                 @click="handleDeleteRow(indexMode, indexList)"
               >x</div>
-              <span class="title">队列{{ indexList }}</span>
+              <span
+                v-if="itemList.name"
+                class="title">{{ itemList.name }}</span>
               <div
                 v-for="(itemTemp,indexTemp) in itemList.value"
                 :key="'lay'+indexTemp+Math.random()"
                 class="box"
               >
                 <div
-                  v-if="indexTemp"
+                  v-if="indexTemp && getIsShowBtn(1)"
                   class="delete"
                   @click="handleDeleteRow(indexMode, indexList, indexTemp)"
                 >x</div>
                 <div
-                  v-for="(itemComp,indexComp) in itemTemp.value"
+                  v-for="(itemComp,indexComp) in itemTemp"
                   :key="`item2`+indexComp+Math.random()"
                   class="row"
                 >
@@ -85,7 +115,7 @@
                       :value="index"/>
                   </el-select>
                   <el-button
-                    v-if="form.newValue.data[indexMode].value[indexList].value.length === 1"
+                    v-if="form.newValue.data[indexMode].value[indexList].value.length === 1 && getIsShowBtn(0)"
                     :class="{isHas:itemComp.type || itemComp.type === 0}"
                     class="btn"
                     size="small"
@@ -94,7 +124,7 @@
                   >删除</el-button>
                 </div>
                 <el-button
-                  v-if="form.newValue.data[indexMode].value[indexList].value.length === 1"
+                  v-if="form.newValue.data[indexMode].value[indexList].value.length === 1 && getIsShowBtn(0)"
                   class="btn"
                   style="margin-left: 0px;"
                   size="small"
@@ -103,17 +133,20 @@
               </div>
 
               <el-button
+                v-if="getIsShowBtn(1)"
                 size="small"
                 @click="handleAddRow(indexMode,indexList)"
-              >添加模版</el-button>
+              >添加队列</el-button>
             </div>
             <el-button
+              v-if="getIsShowBtn(2)"
               style="margin-top: 20px"
               size="small"
               @click="handleAddList(indexMode)"
-            >添加队列</el-button>
+            >添加分组</el-button>
           </div>
           <el-button
+            v-if="getIsShowBtn(3)"
             style="margin-top: 20px"
             size="small"
             @click="handleAddMode"
@@ -128,6 +161,8 @@
 import configForm from '../../configForm2'
 import FormComp from '../../index.vue'
 
+const btns = ['添加组件', '添加队列', '添加分组', '添加模式']
+
 export default {
   name: 'ImYourselfList',
   components: {
@@ -138,10 +173,18 @@ export default {
   },
   data () {
     return {
+      checkAll: true,
+      isIndeterminate: true,
+      checkboxGroup: JSON.parse(JSON.stringify(btns)),
+      checkOptions: btns,
+
       select: '',
       options: configForm,
       form: {
-        newValue: this.$attrs.value
+        newValue: {
+          checkboxGroup: this.checkboxGroup,
+          ...this.$attrs.value
+        }
       }
     }
   },
@@ -182,9 +225,49 @@ export default {
         this.isClearVilidate()
       },
       deep: true
+    },
+    'form.newValue.checkboxGroup': {
+      handler (vl) {
+        this.checkboxGroup = vl
+      },
+      deep: true,
+      immediate: true
+    },
+    // 兼容旧数据(没有这个字段情况下)
+    'form.newValue.isShowBtn': {
+      handler (vl) {
+        if (typeof vl === 'undefined') {
+          this.form.newValue.isShowBtn = true
+          this.form.newValue.checkboxGroup = JSON.parse(JSON.stringify(btns))
+          this.isIndeterminate = false
+        }
+      },
+      deep: true,
+      immediate: true
     }
   },
   methods: {
+    // 按钮是否显示
+    getIsShowBtn (index) {
+      let state = false
+      if (this.checkboxGroup && this.checkboxGroup.includes(JSON.parse(JSON.stringify(btns))[index])) {
+        state = true
+      }
+      return state
+    },
+    // 按钮全选
+    handleCheckAllChange (val) {
+      this.form.newValue.checkboxGroup = val ? btns : []
+      this.checkboxGroup = val ? btns : []
+      this.isIndeterminate = false
+    },
+    // 改变选中按钮
+    handleCheckedChange (value) {
+      const checkedCount = value.length
+      this.checkAll = checkedCount === this.checkOptions.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkOptions.length
+      this.form.newValue.checkboxGroup = this.checkboxGroup
+    },
     // 添加模式
     handleAddMode () {
       this.form.newValue.data.push(
@@ -205,7 +288,7 @@ export default {
         }
       )
     },
-    // 添加队列
+    // 添加分组
     handleAddList (indexMode) {
       this.form.newValue.data[indexMode].value.push({
         value: [
@@ -231,10 +314,10 @@ export default {
     getConfig (item) {
       return [item]
     },
-    // 添加模版内元素
+    // 添加分组内元素
     handleAdd (indexMode, indexList, indexTemp) {
-      console.log('添加模版内元素', indexMode, indexList, indexTemp)
-      this.form.newValue.data[indexMode].value[indexList].value[indexTemp].value.push({ type: '' })
+      console.log('添加分组内元素', indexMode, indexList, indexTemp)
+      this.form.newValue.data[indexMode].value[indexList].value[indexTemp].push({ type: '' })
     },
     // 添加整个模版
     handleAddRow (indexMode, indexList) {
@@ -243,7 +326,7 @@ export default {
     handleDelete (indexMode, indexList, indexTemp, indexComp) {
       console.log(111, indexMode, indexList, indexTemp, indexComp)
       const newForm = JSON.parse(JSON.stringify(this.form.newValue.data))
-      newForm[indexMode].value[indexList].value[indexTemp].value = newForm[indexMode].value[indexList].value[indexTemp].value.filter((v, i) => i !== indexComp)
+      newForm[indexMode].value[indexList].value[indexTemp] = newForm[indexMode].value[indexList].value[indexTemp].filter((v, i) => i !== indexComp)
       this.form.newValue.data = newForm
     },
     // 删除
@@ -294,7 +377,7 @@ export default {
     // 获取选中后的表单配置
     handleChange (type, indexMode, indexList, indexTemp, indexComp) {
       const newForm = JSON.parse(JSON.stringify(this.form.newValue.data))
-      newForm[indexMode].value[indexList].value[indexTemp].value[indexComp] = this.newOptions[type]
+      newForm[indexMode].value[indexList].value[indexTemp][indexComp] = this.newOptions[type]
       setTimeout(() => { this.form.newValue.data = newForm }, 0)
     },
     // 校验表单
@@ -310,6 +393,9 @@ export default {
 </script>
 
 <style scoped>
+  .group >>> .el-checkbox{
+    margin-right: 0px;
+  }
   .form-input{
     display: flex;
     flex-direction: row;
@@ -351,6 +437,12 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+  .select-box2{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
   }
   .img-container .btn{
     margin-left: 10px;
