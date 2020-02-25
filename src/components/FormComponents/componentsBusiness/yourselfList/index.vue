@@ -1,32 +1,33 @@
 <template>
   <div>
-    <div
-      v-if="form.newValue.isShowBtn"
-      class="select-box2">
-      <el-checkbox
-        :indeterminate="checkboxGroup.length > 0 && checkboxGroup.length < checkOptions.length"
-        v-model="checkAll"
-        border
-        size="small"
-        @change="handleCheckAllChange"
-      >全选</el-checkbox>
-      <div style="margin: 4px 0;"/>
-      <el-checkbox-group
-        v-model="checkboxGroup"
-        class="group"
-        size="small"
-        @change="handleCheckedChange"
-      >
+    <div>
+      <div
+        v-if="form.newValue.isShowBtn"
+        class="select-box2">
         <el-checkbox
-          v-for="(item,index) in checkOptions"
-          :label="item"
-          :key="index"
+          :indeterminate="checkboxGroup.length > 0 && checkboxGroup.length < checkOptions.length"
+          v-model="checkAll"
           border
-        />
+          size="small"
+          @change="handleCheckAllChange"
+        >全选</el-checkbox>
+        <div style="margin: 4px 0;"/>
+        <el-checkbox-group
+          v-model="checkboxGroup"
+          class="group"
+          size="small"
+          @change="handleCheckedChange"
+        >
+          <el-checkbox
+            v-for="(item,index) in checkOptions"
+            :label="item"
+            :key="index"
+            border
+          />
 
-      </el-checkbox-group>
-    </div>
-    <el-form
+        </el-checkbox-group>
+      </div>
+      <el-form
       ref="form"
       :model="form"
       class="form-input">
@@ -38,135 +39,109 @@
         class="item"
       >
         <div class="img-container">
-          <el-radio-group
-            v-model="form.newValue.curMode"
-            size="small"
-            style="margin-bottom: 20px;">
-            <el-radio-button
-              v-for="(item,index) in form.newValue.data"
-              :label="index"
-              :key="index"
-            >{{ item.name }}</el-radio-button>
-          </el-radio-group>
           <div
-            v-for="(itemMode,indexMode) in form.newValue.data"
-            v-if="indexMode === form.newValue.curMode"
-            :key="'lay'+indexMode+Math.random()"
-            class="mode-box">
+            v-for="(itemList,indexList) in form.newValue.value"
+            :key="'lay'+indexList+Math.random()"
+            class="list-box">
             <div
-              v-if="indexMode && getIsShowBtn(3)"
+              v-if="getIsShowBtn(0)"
               class="delete"
-              @click="handleDeleteRow(indexMode)"
+              @click="handleDeleteRow(indexList)"
             >x</div>
-            <span
-              v-if="itemMode.name"
-              class="title">{{ itemMode.name }}</span>
             <div
-              v-for="(itemList,indexList) in itemMode.value"
-              :key="'lay'+indexList+Math.random()"
-              class="list-box">
+              v-for="(itemComp,indexComp) in itemList"
+              :key="`item2`+indexComp+Math.random()"
+              class="row"
+            >
               <div
-                v-if="indexList && getIsShowBtn(2)"
-                class="delete"
-                @click="handleDeleteRow(indexMode, indexList)"
-              >x</div>
-              <span
-                v-if="itemList.name"
-                class="title">{{ itemList.name }}</span>
-              <div
-                v-for="(itemTemp,indexTemp) in itemList.value"
-                :key="'lay'+indexTemp+Math.random()"
-                class="box"
+                v-if="itemComp.type || itemComp.type === 0"
+                class="row-box"
               >
-                <div
-                  v-if="indexTemp && getIsShowBtn(1)"
-                  class="delete"
-                  @click="handleDeleteRow(indexMode, indexList, indexTemp)"
-                >x</div>
-                <div
-                  v-for="(itemComp,indexComp) in itemTemp"
-                  :key="`item2`+indexComp+Math.random()"
-                  class="row"
-                >
-                  <div
-                    v-if="itemComp.type || itemComp.type === 0"
-                    class="row-box"
-                  >
-                    <FormComp
-                      v-if="typeof itemComp.type === 'string'"
-                      ref="form2"
-                      :form="getConfig(itemComp)"
-                      :key="`item6`+indexComp+Math.random()"
-                    />
-                  </div>
-                  <el-select
-                    v-else
-                    v-model="itemComp.type"
-                    :filterable="true"
-                    size="small"
-                    placeholder="请选择"
-                    class="select-box"
-                    @change="handleChange(itemComp.type,indexMode, indexList, indexTemp,indexComp)"
-                  >
-                    <el-option
-                      v-for="(item,index) in newOptions"
-                      :key="'ops'+item.type+Math.random()"
-                      :label="item.name"
-                      :value="index"/>
-                  </el-select>
-                  <el-button
-                    v-if="form.newValue.data[indexMode].value[indexList].value.length === 1 && getIsShowBtn(0)"
-                    :class="{isHas:itemComp.type || itemComp.type === 0}"
-                    class="btn"
-                    size="small"
-                    type="danger"
-                    @click="handleDelete(indexMode,indexList,indexTemp, indexComp)"
-                  >删除</el-button>
-                </div>
-                <el-button
-                  v-if="form.newValue.data[indexMode].value[indexList].value.length === 1 && getIsShowBtn(0)"
-                  class="btn"
-                  style="margin-left: 0px;"
-                  size="small"
-                  @click="handleAdd(indexMode,indexList,indexTemp)"
-                >添加组件</el-button>
+                <FormComp
+                  v-if="typeof itemComp.type === 'string'"
+                  ref="form2"
+                  :form="getConfig(itemComp)"
+                  :key="`item6`+indexComp+Math.random()"
+                  :is-auto-bind="$attrs.isAutoBind"
+                />
               </div>
-
+              <el-select
+                v-else
+                v-model="itemComp.type"
+                :filterable="true"
+                size="small"
+                placeholder="请选择"
+                class="select-box"
+                @change="handleChange(itemComp.type, indexList, indexComp)"
+              >
+                <el-option
+                  v-for="(item,index) in newOptions"
+                  :key="'ops'+item.type+Math.random()"
+                  :label="item.name"
+                  :value="index"/>
+              </el-select>
               <el-button
                 v-if="getIsShowBtn(1)"
+                :class="{isHas:itemComp.type || itemComp.type === 0}"
+                class="btn"
                 size="small"
-                @click="handleAddRow(indexMode,indexList)"
-              >添加队列</el-button>
+                type="danger"
+                @click="handleDelete(indexList, indexComp)"
+              >删除</el-button>
             </div>
             <el-button
-              v-if="getIsShowBtn(2)"
-              style="margin-top: 20px"
+              v-if="getIsShowBtn(1)"
+              class="btn"
+              style="margin-left: 0px;"
               size="small"
-              @click="handleAddList(indexMode)"
-            >添加分组</el-button>
+              @click="handleAdd(indexList)"
+            >添加组件</el-button>
           </div>
+
           <el-button
-            v-if="getIsShowBtn(3)"
-            style="margin-top: 20px"
+            v-if="getIsShowBtn(0)"
             size="small"
-            @click="handleAddMode"
-          >添加模式</el-button>
+            @click="handleAddRow()"
+          >添加队列</el-button>
         </div>
       </el-form-item>
     </el-form>
+    </div>
+    <div
+      v-if="$attrs.isConfig"
+      style="width: 500px;"
+      class="config-box config-box2"
+    >
+      <div v-for="(item5,index5) in form.newValue.value" :key="index5">
+        <div v-for="(item6,index6) in item5" :key="index6">
+          <span style="color: #16b002;">队列{{index5}}-组件{{index6}}</span>
+          <el-input v-model="item6.attr" placeholder="key"></el-input>
+          <el-input v-model="item6.name" placeholder="名称"></el-input>
+          <div v-if="item6.options">
+            <span style="text-align:center;vertical-align:middle;">选项</span>
+            <span>
+              <SelectContentEdit
+                :value="item6.options" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import SelectContentEdit from '../../SelectContentEdit/index.vue'
 import configForm from '../../configForm2'
 import FormComp from '../../index.vue'
 
-const btns = ['添加组件', '添加队列', '添加分组', '添加模式']
+const btns = ['添加队列', '添加组件']
 
 export default {
   name: 'ImYourselfList',
   components: {
-    FormComp
+    FormComp,
+    SelectContentEdit
   },
   props: {
     value: [String, Array, Object]
@@ -177,15 +152,14 @@ export default {
       isIndeterminate: true,
       checkboxGroup: JSON.parse(JSON.stringify(btns)),
       checkOptions: btns,
-
-      select: '',
       options: configForm,
       form: {
         newValue: {
           checkboxGroup: this.checkboxGroup,
           ...this.$attrs.value
         }
-      }
+      },
+      newForm: null
     }
   },
   computed: {
@@ -196,7 +170,16 @@ export default {
     newOptions () {
       let list = this.options
       try {
-        list = list.filter(v => !['YourselfList', 'YourselfDiy', 'Layout', 'Line', 'Button', 'Transfer', 'Upload', 'Cascader'].includes(v.type) && `${v.status}` !== '2')
+        list = list.filter(v => ![
+          'YourselfList',
+          'YourselfListMode',
+          'YourselfDiy',
+          'Layout',
+          'Line',
+          'Button',
+          'Transfer',
+          'Upload',
+          'Cascader'].includes(v.type) && `${v.status}` !== '2')
       } catch (e) {
         console.log('err==>', e)
       }
@@ -218,28 +201,30 @@ export default {
     },
     'form.newValue': {
       handler (vl) {
-        this.$emit('onInput', vl)
+        console.log(333, typeof vl, vl)
+        let newValue = vl
+        try {
+          if (typeof vl === 'string') {
+            newValue = JSON.parse(vl)
+          }
+        } catch (e) {
+          console.log('err=>', e)
+        }
+        this.$attrs.props.isAutoBind && this.$emit('onInput', newValue)
         if (vl === '' && this.oldForm) {
           this.form = this.oldForm
         }
         this.isClearVilidate()
-      },
-      deep: true
-    },
-    'form.newValue.checkboxGroup': {
-      handler (vl) {
-        this.checkboxGroup = vl
+        const data = JSON.parse(JSON.stringify(vl))
+        this.newForm = data.value
       },
       deep: true,
       immediate: true
     },
-    // 兼容旧数据(没有这个字段情况下)
-    'form.newValue.isShowBtn': {
+    'form.newValue.checkboxGroup': {
       handler (vl) {
-        if (typeof vl === 'undefined') {
-          this.form.newValue.isShowBtn = true
-          this.form.newValue.checkboxGroup = JSON.parse(JSON.stringify(btns))
-          this.isIndeterminate = false
+        if (vl) {
+          this.checkboxGroup = vl
         }
       },
       deep: true,
@@ -268,39 +253,6 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkOptions.length
       this.form.newValue.checkboxGroup = this.checkboxGroup
     },
-    // 添加模式
-    handleAddMode () {
-      this.form.newValue.data.push(
-        {
-          name: `模式${this.form.newValue.data.length}`,
-          value: [
-            {
-              value: [
-                {
-                  value:
-                      [
-                        { type: '' }
-                      ]
-                }
-              ]
-            }
-          ]
-        }
-      )
-    },
-    // 添加分组
-    handleAddList (indexMode) {
-      this.form.newValue.data[indexMode].value.push({
-        value: [
-          {
-            value:
-                [
-                  { type: '' }
-                ]
-          }
-        ]
-      })
-    },
     // 时时校验-校验通过清除提示
     isClearVilidate () {
       if (this.isVilidate()) {
@@ -315,29 +267,34 @@ export default {
       return [item]
     },
     // 添加分组内元素
-    handleAdd (indexMode, indexList, indexTemp) {
-      console.log('添加分组内元素', indexMode, indexList, indexTemp)
-      this.form.newValue.data[indexMode].value[indexList].value[indexTemp].push({ type: '' })
+    handleAdd (indexList, indexTemp) {
+      this.onDataBind()
+      console.log('添加分组内元素1', indexList, indexTemp)
+      this.form.newValue.value[indexList].push({ type: '' })
     },
-    // 添加整个模版
-    handleAddRow (indexMode, indexList) {
-      this.form.newValue.data[indexMode].value[indexList].value.push(JSON.parse(JSON.stringify(this.form.newValue.data[indexMode].value[indexList].value[0])))
+    // 添加队列
+    handleAddRow () {
+      this.onDataBind()
+      if (this.form.newValue.value && this.form.newValue.value[0]) {
+        this.form.newValue.value.push(JSON.parse(JSON.stringify(this.form.newValue.value[0])))
+      } else {
+        this.form.newValue.value.push([{type: ''}])
+      }
     },
-    handleDelete (indexMode, indexList, indexTemp, indexComp) {
-      console.log(111, indexMode, indexList, indexTemp, indexComp)
-      const newForm = JSON.parse(JSON.stringify(this.form.newValue.data))
-      newForm[indexMode].value[indexList].value[indexTemp] = newForm[indexMode].value[indexList].value[indexTemp].filter((v, i) => i !== indexComp)
-      this.form.newValue.data = newForm
+    handleDelete (indexList, indexComp) {
+      this.onDataBind()
+      console.log(111, indexList, indexComp)
+      const newForm = JSON.parse(JSON.stringify(this.form.newValue.value))
+      newForm[indexList] = newForm[indexList].filter((v, i) => i !== indexComp)
+      this.form.newValue.value = newForm
     },
     // 删除
-    handleDeleteRow (indexMode, indexList, indexTemp) {
-      if (indexTemp) {
-        this.form.newValue.data[indexMode].value[indexList].value.splice(indexTemp, 1)
-      } else if (indexList) {
-        this.form.newValue.data[indexMode].value.splice(indexList, 1)
-      } else if (indexMode) {
-        this.form.newValue.data.splice(indexMode, 1)
-        this.form.newValue.curMode = this.form.newValue.curMode - 1
+    handleDeleteRow (indexList, indexTemp) {
+      this.onDataBind()
+      if (indexTemp > -1) {
+        this.form.newValue.value[indexList].splice(indexTemp, 1)
+      } else if (indexList > -1) {
+        this.form.newValue.value.splice(indexList, 1)
       }
     },
     // 是否校验通过
@@ -356,29 +313,41 @@ export default {
     },
     validate () {
       console.log(888, this.form)
-      let state = false
+      let state = true
       // 判断字段是否数据正确，如果正确的话校验通过，否则校验不过
-      this.oldForm = JSON.parse(JSON.stringify(this.form))
-      if (this.isVilidate()) {
-        this.form.newValue = JSON.stringify(this.form.newValue)
-      } else {
-        this.form.newValue = ''
-      }
-      state = true
-      // 只有分数段 存在才做校验
-      this.$refs.form.validate((res) => {
-        state = res
-      })
+      // this.oldForm = JSON.parse(JSON.stringify(this.form))
+      // if (this.isVilidate()) {
+      //   this.form.newValue = JSON.stringify(this.form.newValue)
+      // } else {
+      //   this.form.newValue = ''
+      // }
+      // state = true
+      // // 只有分数段 存在才做校验
+      // this.$refs.form.validate((res) => {
+      //   state = res
+      // })
       return state
     },
     handleAvatarSuccess (res) {
       this.form.newValue = res.url
     },
     // 获取选中后的表单配置
-    handleChange (type, indexMode, indexList, indexTemp, indexComp) {
-      const newForm = JSON.parse(JSON.stringify(this.form.newValue.data))
-      newForm[indexMode].value[indexList].value[indexTemp][indexComp] = this.newOptions[type]
-      setTimeout(() => { this.form.newValue.data = newForm }, 0)
+    handleChange (type, indexList, indexComp) {
+      this.onDataBind()
+      console.log('333-1', type, indexList, indexComp, this.form.newValue.value)
+      const newForm = JSON.parse(JSON.stringify(this.form.newValue.value))
+      newForm[indexList][indexComp] = this.newOptions[type]
+      console.log('333-2', newForm)
+      setTimeout(() => {
+        let form = this.form.newValue
+        if (typeof form === 'string') {
+          form = JSON.parse(form)
+        }
+        form.value = newForm
+        console.log('333-4', form)
+        this.form.newValue = form
+        console.log('333-5', this.form.newValue)
+      }, 0)
     },
     // 校验表单
     formValidate () {
@@ -387,6 +356,16 @@ export default {
     // 清除表单
     formClearValidate () {
       this.$refs.form && this.$refs.form.clearValidate()
+    },
+    // 数据绑定(手动)
+    onDataBind () {
+      console.log(9996, this.$refs.form2)
+
+      if (this.$refs.form2) {
+        this.$refs.form2.map(v => {
+          v.onDataBind && v.onDataBind()
+        })
+      }
     }
   }
 }
@@ -437,6 +416,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    min-width: 300px;
   }
   .select-box2{
     display: flex;
@@ -494,33 +474,19 @@ export default {
     border-radius: 4px;
     z-index: 0;
   }
-  .mode-box,.list-box{
+  .list-box{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border: 1px dashed #00bfff;
     border-radius: 4px;
-    padding: 20px;
     position: relative;
-  }
-  .mode-box{
-    border: 1px dashed #ff81a7;
-  }
-  .list-box{
     border: 1px dashed #fc8fff;
     margin-bottom: 10px;
+    padding: 10px;
   }
-  .title{
-    display: inline-block;
-    background-color: white;
-    font-size: 12px;
-    color: #323232;
-    position: absolute;
-    top: -8px;
-    left: 8px;
-    padding: 0 6px;
-    z-index: 10;
-    height: 12px;
-    line-height: 12px;
+  .row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 </style>

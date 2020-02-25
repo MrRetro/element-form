@@ -27,45 +27,16 @@
 </template>
 
 <script>
+import { common } from '../../mixins/common'
+
 export default {
   name: 'ImCheckBox',
-  props: {
-    value: Array
-  },
+  mixins: [common],
   data () {
     return {
       form: {
         newValue: this.$attrs.value || []
       }
-    }
-  },
-  computed: {
-    isRequired () {
-      return this.$attrs.props.rules && this.$attrs.props.rules.required
-    }
-  },
-  watch: {
-    value: {
-      handler (vl) {
-        this.form.newValue = vl
-      },
-      deep: true,
-      immediate: true
-    },
-    'form.newValue': {
-      handler (vl) {
-        this.$emit('onInput', vl)
-      },
-      deep: true
-    }
-  },
-  methods: {
-    validate () {
-      let state = false
-      this.$refs.form.validate((res) => {
-        state = res
-      })
-      return state
     }
   }
 }

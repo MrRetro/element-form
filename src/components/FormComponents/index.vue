@@ -11,15 +11,71 @@
         v-bind="item"
         :value="item.value"
         :index="index"
+        :isAutoBind="isAutoBind"
         @onInput="onInput"
       />
       <span
         v-if="isDelete"
         class="close"
         @click="close(index)">x</span>
-
-      <div
-        v-if="item.type === 'YourselfList' && isShowConfig"
+      <div class="configs" v-if="newForm">
+        <!--普通配置-->
+        <div
+          v-if="typeParent !=='YourselfDiy' && item.type !=='YourselfDiy' && isShowConfig"
+          class="config-box"
+        >
+          <span>参数配置</span>
+          <table>
+            <tbody>
+            <tr><td>key值</td><td><el-input v-model="item.attr"/></td></tr>
+            <tr><td>名称</td><td><el-input v-model="item.name"/></td></tr>
+            <tr v-if="item.options">
+              <td style="text-align:center;vertical-align:middle;">选项</td>
+              <td>
+                <SelectContentEdit
+                  :value="item.options"
+                />
+              </td>
+            </tr>
+            <tr><td>必填</td><td><el-switch v-model="item.props.rules.required"/></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <!--自定义队列-->
+<!--        <div-->
+<!--          v-if="item.type === 'YourselfList' && isShowConfig"-->
+<!--          style="width: 500px;"-->
+<!--          class="config-box config-box2"-->
+<!--        >-->
+<!--          <div-->
+<!--            v-for="(item1,index1) in item.value.value"-->
+<!--            :key="'index1'+index1"-->
+<!--          >-->
+<!--            <span style="color: #ff81a7;">队列{{index1}}</span>-->
+<!--            <div-->
+<!--              v-for="(item2,index2) in item1"-->
+<!--              :key="'index2'+index2 + Math.random()"-->
+<!--            >-->
+<!--              <span style="color: #16b002;">组件{{index2}}</span>-->
+<!--              <div class="tb-box">-->
+<!--                <div>-->
+<!--                  <div><span>key值</span><span><el-input v-model="item2.attr"/></span></div>-->
+<!--                  <div><span>名称</span><span><el-input v-model="item2.name"/></span></div>-->
+<!--                  <div v-if="item2.options">-->
+<!--                    <span style="text-align:center;vertical-align:middle;">选项</span>-->
+<!--                    <span>-->
+<!--                        <SelectContentEdit-->
+<!--                          :value="item2.options" />-->
+<!--                      </span>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!--自定义队列+模式-->
+        <div
+        v-if="item.type === 'YourselfListMode' && isShowConfig"
         style="width: 500px;"
         class="config-box config-box2"
       >
@@ -30,57 +86,68 @@
             <div><span>名称</span><span><el-input v-model="item.value.data[item.value.curMode].name"/></span></div>
           </div>
         </div>
-        <div
-          v-for="(item1,index1) in item.value.data[item.value.curMode].value"
-          :key="'index1'+index1"
-        >
-          <span style="color: #fc8fff;">分组{{ index1 }}</span>
-          <div class="tb-box">
-            <div>
-              <div><span>key值</span><span><el-input v-model="item1.attr"/></span></div>
-              <div><span>名称</span><span><el-input v-model="item1.name"/></span></div>
-              <div>
-                <div>
-                  <div
-                    v-for="(item2,index2) in item1.value"
-                    :key="'index2'+index2"
-                  >
-                    <span style="color: #00bfff;">队列{{ index2 }}</span>
-                    <div class="tb-box">
-                      <div>
-                        <div><span>key值</span><span><el-input v-model="item2.attr"/></span></div>
-                        <div><span>名称</span><span><el-input v-model="item2.name"/></span></div>
-                        <div>
-                          <div>
-                            <div
-                              v-for="(item3,index3) in item2"
-                              :key="'index3'+index3"
-                            >
-                              <span style="color: #16b002;">组件</span>
-                              <div class="tb-box">
-                                <div>
-                                  <div><span>key值</span><span><el-input v-model="item3.attr"/></span></div>
-                                  <div><span>名称</span><span><el-input v-model="item3.name"/></span></div>
-                                  <div v-if="item3.options">
-                                    <span style="text-align:center;vertical-align:middle;">选项</span>
-                                    <span>
-                                        <SelectContentEdit
-                                          :value="item3.options"
-                                        />
-                                      </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+<!--        <div-->
+<!--          v-for="(item1,index1) in item.value.data[item.value.curMode].value"-->
+<!--          :key="'index1'+index1 + Math.random()"-->
+<!--        >-->
+<!--          <span style="color: #fc8fff;">组件{{ index1 }}</span>-->
+<!--          <div class="tb-box">-->
+<!--            <div>-->
+<!--              <div>-->
+<!--                <div v-for="(item3,index3) in item1.value"-->
+<!--                  :key="'index3'+index3 + Math.random()">-->
+<!--                  <div-->
+<!--                    v-if="item3.type === 'YourselfList'"-->
+<!--                    style="width: 500px;"-->
+<!--                    class="config-box config-box2"-->
+<!--                  >-->
+<!--                    <div><span>key值</span><span><el-input v-model="item3.attr"/></span></div>-->
+<!--                    <div><span>名称</span><span><el-input v-model="item3.name"/></span></div>-->
+<!--                    &lt;!&ndash;队列配置&ndash;&gt;-->
+<!--                    <div-->
+<!--                      style="padding-left: 20px;"-->
+<!--                      v-for="(item4,index4) in item3.value.value"-->
+<!--                      :key="'index4'+index4 + Math.random()"-->
+<!--                    >-->
+<!--                      <span style="color: #ff81a7;">队列{{index4}}</span>-->
+<!--                      <div-->
+<!--                        v-for="(item5,index5) in item4"-->
+<!--                        :key="'index5'+index5 + Math.random()"-->
+<!--                      >-->
+<!--                        <span style="color: #16b002;">组件{{index5}}</span>-->
+<!--                        <div class="tb-box">-->
+<!--                          <div>-->
+<!--                            <div><span>key值</span><span><el-input v-model="item5.attr"/></span></div>-->
+<!--                            <div><span>名称</span><span><el-input v-model="item5.name"/></span></div>-->
+<!--                            <div v-if="item5.options">-->
+<!--                              <span style="text-align:center;vertical-align:middle;">选项</span>-->
+<!--                              <span>-->
+<!--                                <SelectContentEdit-->
+<!--                                  :value="item5.options" />-->
+<!--                              </span>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  &lt;!&ndash;普通组件配置&ndash;&gt;-->
+<!--                  <div v-else="">-->
+<!--                    <div><span>key值</span><span><el-input v-model="item3.attr"/></span></div>-->
+<!--                    <div><span>名称</span><span><el-input v-model="item3.name"/></span></div>-->
+<!--                    <div v-if="item3.options">-->
+<!--                      <span style="text-align:center;vertical-align:middle;">选项</span>-->
+<!--                      <span>-->
+<!--                        <SelectContentEdit-->
+<!--                          :value="item3.options" />-->
+<!--                      </span>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
       </div>
     </div>
@@ -118,6 +185,11 @@ export default {
     form: {
       type: Array,
       default: () => []
+    },
+    // 是否自动双向绑定数据
+    isAutoBind: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -136,6 +208,8 @@ export default {
   },
   methods: {
     onInput (target, index, item) {
+      console.log(9995, target)
+      console.log(777, target)
       this.newForm[index].value = target
 
       this.$emit('onForm', this.newForm)
@@ -167,6 +241,16 @@ export default {
     // 删除
     close (index) {
       this.$emit('onDelete', index)
+    },
+    // 数据绑定(手动)
+    onDataBind () {
+      console.log(9991, this.$refs.form)
+
+      if (this.$refs.form) {
+        this.$refs.form.map(v => {
+          v.onDataBind && v.onDataBind()
+        })
+      }
     }
   }
 }
@@ -210,7 +294,7 @@ export default {
   width: initial;
 }
 .config-box{
-  opacity: .5;
+  opacity: .9;
   transform: scale(.8);
 }
 .config-box2{

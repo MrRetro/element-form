@@ -69,7 +69,9 @@
       width="1200px"
       @close="close">
       <FormComp
+        ref="preForm"
         :form="preForm"
+        :isAutoBind="false"
         :is-show-config="isConfig"
       />
       <span
@@ -165,10 +167,12 @@ export default {
   methods: {
     // 确定
     submit () {
+      this.onDataBind()
       let count = 0
       // 更新数据
       this.form.newValue.layout.map((v) => {
         if (v.config) {
+          delete this.preForm[count].isConfig
           v.config = [this.preForm[count]]
           count += 1
         }
@@ -179,11 +183,13 @@ export default {
       let arr = []
       let newArr = []
       try {
+        console.log(666, this.form.newValue.layout)
         newArr = JSON.parse(JSON.stringify(this.form.newValue.layout)).filter(v => v.config)
 
         newArr.map((v) => {
           arr = arr.concat(v.config)
         })
+        arr.map(v => { if (!v.isConfig) { v.isConfig = true } })
         this.preForm = arr
       } catch (e) {
         console.log('获取失败==>', e)
@@ -253,6 +259,11 @@ export default {
     close () {
       this.dialogVisible = false
       this.isConfig = false
+    },
+    // 数据绑定(手动)
+    onDataBind () {
+      console.log(999, this.$refs.preForm)
+      this.$refs.preForm.onDataBind && this.$refs.preForm.onDataBind()
     }
   }
 }

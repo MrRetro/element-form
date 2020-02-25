@@ -49,28 +49,39 @@ export default [
     status: '1'
   },
   {
+    name: '自定义队列',
+    value: {
+      isShowBtn: true,
+      value: [
+        [
+          {type: ''}
+        ]
+      ]
+    },
+    type: 'YourselfList',
+    props: { rules: { required: false, message: '请填写', target: 'blur' }, typeName: 'word' },
+    status: '1'
+  },
+  {
     name: '自定义队列+模式',
     value: {
       curMode: 0,
       isShowBtn: true,
-      checkboxGroup: ['添加组件', '添加队列', '添加分组', '添加模式'],
+      checkboxGroup: ['添加模式', '添加'],
       data: [
         {
           name: '模式0',
           value: [
             {
-              name: '分组0',
               value: [
-                [
-                  { type: '' }
-                ]
+                { type: '' }
               ]
             }
           ]
         }
       ]
     },
-    type: 'YourselfList',
+    type: 'YourselfListMode',
     props: { rules: { required: true, message: '请填写', target: 'blur' }, typeName: 'word' },
     status: '1'
   },

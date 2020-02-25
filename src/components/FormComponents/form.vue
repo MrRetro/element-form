@@ -23,7 +23,13 @@ export default {
     type: String,
     props: Object,
     index: [Number, String],
-    options: Array
+    options: Array,
+    isConfig: Boolean,
+    // 是否自动双向绑定数据
+    isAutoBind: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     comp () {
@@ -32,10 +38,19 @@ export default {
   },
   methods: {
     onInput (vl) {
+      console.log(9994, vl)
       this.$emit('onInput', vl, this.index, this.$attrs)
     },
     validate () {
       return this.$refs.formItem.validate && this.$refs.formItem.validate()
+    },
+    // 数据绑定(手动)
+    onDataBind () {
+      console.log(9992, this.$refs.formItem)
+
+      if (this.$refs.formItem) {
+        this.$refs.formItem.onDataBind && this.$refs.formItem.onDataBind()
+      }
     }
   }
 

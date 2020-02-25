@@ -21,11 +21,11 @@
 </template>
 
 <script>
+import { common } from '../../mixins/common'
+
 export default {
   name: 'ImCascader',
-  props: {
-    value: [String, Array]
-  },
+  mixins: [common],
   data () {
     return {
       form: {
@@ -34,9 +34,6 @@ export default {
     }
   },
   computed: {
-    isRequired () {
-      return this.$attrs.props.rules && this.$attrs.props.rules.required
-    },
     newOptions () {
       let list = this.$attrs.options || []
       if (Array.isArray(this.$attrs.options)) {
@@ -55,21 +52,6 @@ export default {
       },
       deep: true,
       immediate: true
-    },
-    'form.newValue': {
-      handler (vl) {
-        this.$emit('onInput', `${vl}`)
-      },
-      deep: true
-    }
-  },
-  methods: {
-    validate () {
-      let state = false
-      this.$refs.form.validate((res) => {
-        state = res
-      })
-      return state
     }
   }
 }
