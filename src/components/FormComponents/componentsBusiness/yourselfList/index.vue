@@ -225,6 +225,12 @@ export default {
       handler (vl) {
         if (vl) {
           this.checkboxGroup = vl
+          // 判断全选状态
+          if (vl && vl.length === btns.length) {
+            this.checkAll = true
+          } else {
+            this.checkAll = false
+          }
         }
       },
       deep: true,
@@ -241,15 +247,15 @@ export default {
       return state
     },
     // 按钮全选
-    handleCheckAllChange (val) {
-      this.form.newValue.checkboxGroup = val ? btns : []
-      this.checkboxGroup = val ? btns : []
+    handleCheckAllChange () {
+      const state = this.form.newValue.checkboxGroup && this.form.newValue.checkboxGroup.length === 0
+      this.form.newValue.checkboxGroup = state ? btns : []
+      this.checkboxGroup = state ? btns : []
       this.isIndeterminate = false
     },
     // 改变选中按钮
     handleCheckedChange (value) {
       const checkedCount = value.length
-      this.checkAll = checkedCount === this.checkOptions.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkOptions.length
       this.form.newValue.checkboxGroup = this.checkboxGroup
     },
