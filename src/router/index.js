@@ -1,21 +1,20 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Main from '../views/main'
-import Form from '../views/main/form'
+// import Vue from 'vue'
+// import Router from 'vue-router'
+//
+// Vue.use(Router)
 
-Vue.use(Router)
-
-export default new Router({
+/* eslint-disable */
+export default new VueRouter({
   routes: [
     {
       path: '/',
       name: 'main',
-      component: Main
+      component: () => import('../views/main')
     },
     {
       path: '/form',
       name: 'form',
-      component: Form
+      component: () => import('../views/main/form')
     }
   ]
 })
