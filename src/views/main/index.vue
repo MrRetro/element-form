@@ -244,7 +244,7 @@ export default {
   .form-box{
     display: flex;
     /*width: 100vw;*/
-    height: 100vh;
+    /*height: 100vh;*/
   }
   .box{
     display: flex;
