@@ -8,7 +8,14 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted () {
+    this.$nextTick(() => {
+      let div = document.querySelector('.spinner')
+      div && div.classList.remove('hide')
+      div && div.classList.add('hide')
+    })
+  }
 }
 </script>
 
