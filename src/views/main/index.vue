@@ -10,7 +10,7 @@
           v-for="(item,key) in initForm"
           v-if="['2'].includes(item.status)"
           :key="key"
-          :class="{active:key===selected}"
+          :class="{active:`${key}`===`${selected}`}"
           size="small"
           class="btn"
           @click="addComp(key,item.status)"
@@ -20,7 +20,7 @@
           v-for="(item,key) in initForm"
           v-if="!['1','2'].includes(item.status)"
           :key="key"
-          :class="{active:key===selected}"
+          :class="{active:`${key}`===`${selected}`}"
           size="small"
           class="btn"
           @click="addComp(key,item.status)"
@@ -30,7 +30,7 @@
           v-for="(item,key) in initForm"
           v-if="['1'].includes(item.status)"
           :key="key"
-          :class="{active:key===selected}"
+          :class="{active:`${key}`===`${selected}`}"
           size="small"
           class="btn"
           @click="addComp(key,item.status)"
@@ -104,6 +104,10 @@ export default {
     this.value = formatJson(this.form)
     this.oldValue = this.value
     this.initForm = JSON.parse(JSON.stringify(configForm))
+    if (this.$route.params && this.$route.params.index) {
+      this.addComp(this.$route.params.index, this.$route.params.status)
+      return false
+    }
     this.addComp(0, 2)
   },
   data () {
@@ -166,6 +170,7 @@ export default {
     },
     // 添加组件
     addComp (index, status) {
+      console.log('retro', index, status)
       this.isDesc = `${status}` === '2'
       this.selected = index
       try {
@@ -177,6 +182,14 @@ export default {
         console.log(e)
       }
       this.open(true)
+      let path = '/'
+      if (index > -1) {
+        path += index
+        if (status > -1) {
+          path += '/' + status
+        }
+      }
+      this.$router.replace({path})
     },
     onDelete (index) {
       try {
