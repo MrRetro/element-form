@@ -204,6 +204,9 @@ export default {
     background-color: white;
   }
   @media screen and (max-width: 700px) {
+    html{
+      position: fixed;
+    }
     .open{
       display: inline-block;
     }
