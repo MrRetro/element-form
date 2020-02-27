@@ -220,7 +220,8 @@ export default {
       left: 0px;
     }
     .box.right {
-      width: 100% !important;
+      width: 100vw !important;
+      margin-left: 0px !important;
     }
   }
   ::-webkit-scrollbar {/*滚动条整体样式*/
@@ -257,7 +258,9 @@ export default {
     width: 240px;
   }
   .box.right{
-    width: calc(100% - 240px);
+    width: calc(100vw - 240px);
+    position: absolute;
+    margin-left: 240px;
   }
   .btns{
     display: flex;
@@ -290,7 +293,7 @@ export default {
   .pad{
     padding: 20px;
     padding-bottom: 0px;
-    width: 100%;
+    width: calc(100% - 40px);
     position: relative;
   }
   .pad >>> .form-input{
