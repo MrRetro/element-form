@@ -247,8 +247,7 @@ export default {
   }
   .form-box{
     display: flex;
-    /*width: 100vw;*/
-    /*height: 100vh;*/
+    position: fixed;
   }
   .box{
     display: flex;
