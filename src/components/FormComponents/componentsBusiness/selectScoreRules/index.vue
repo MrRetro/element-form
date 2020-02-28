@@ -118,13 +118,15 @@ export default {
   }
   .temp-box .title{
     position: absolute;
-    top: -20px;
+    top: -6px;
     left: 20px;
     background-color: white;
     padding: 0px 10px;
     color: #606266;
     font-size: 12px;
     margin: 0;
+    height: 12px;
+    line-height: 12px;
   }
 .form-input{
   display: flex;
