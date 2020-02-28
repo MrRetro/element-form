@@ -13,7 +13,7 @@
           :class="{active:`${key}`===`${selected}`}"
           size="small"
           class="btn"
-          @click="addComp(key,item.status)"
+          @click="addComp(key, item.type)"
         >{{ item.name }}</p>
         <p class="title">基础组件</p>
         <p
@@ -23,7 +23,7 @@
           :class="{active:`${key}`===`${selected}`}"
           size="small"
           class="btn"
-          @click="addComp(key,item.status)"
+          @click="addComp(key, item.type)"
         >{{ item.name }}</p>
         <p class="title">业务组件</p>
         <p
@@ -33,7 +33,7 @@
           :class="{active:`${key}`===`${selected}`}"
           size="small"
           class="btn"
-          @click="addComp(key,item.status)"
+          @click="addComp(key, item.type)"
         >{{ item.name }}</p>
       </div>
     </div>
@@ -104,11 +104,11 @@ export default {
     this.value = formatJson(this.form)
     this.oldValue = this.value
     this.initForm = JSON.parse(JSON.stringify(configForm))
-    if (this.$route.params && this.$route.params.index) {
-      this.addComp(this.$route.params.index, this.$route.params.status)
+    if (this.$route.params && this.$route.params.type) {
+      this.addComp(this.$route.params.index, this.$route.params.type)
       return false
     }
-    this.addComp(0, 2)
+    this.addComp()
   },
   data () {
     const generateData = _ => {
@@ -169,8 +169,12 @@ export default {
       }
     },
     // 添加组件
-    addComp (index, status) {
-      console.log('retro', index, status)
+    addComp (index = 0, type) {
+      console.log('retro', type)
+      let status = 2
+      // 根据类型找到类型对应的配置
+      const forms = JSON.parse(JSON.stringify(configForm))
+      status = forms[index].status
       this.isDesc = `${status}` === '2'
       this.selected = index
       try {
@@ -183,13 +187,10 @@ export default {
       }
       this.open(true)
       let path = '/'
-      if (index > -1) {
-        path += index
-        if (status > -1) {
-          path += '/' + status
-        }
+      if (type) {
+        path += `${index}/${type.toLowerCase()}`
       }
-      this.$router.replace({path})
+      this.$router.replace(path)
     },
     onDelete (index) {
       try {

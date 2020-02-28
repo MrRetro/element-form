@@ -12,12 +12,7 @@ export default new VueRouter({
       component: () => import('../views/main')
     },
     {
-      path: '/:index',
-      name: 'main',
-      component: () => import('../views/main')
-    },
-    {
-      path: '/:index/:status',
+      path: '/:index/:type',
       name: 'main',
       component: () => import('../views/main')
     },
