@@ -168,7 +168,7 @@ export default {
     },
     // 过滤表单选项,隐藏一些组件不让选择
     newOptions () {
-      let list = this.options
+      let list = JSON.parse(JSON.stringify(configForm))
       try {
         list = list.filter(v => ![
           'YourselfList',
