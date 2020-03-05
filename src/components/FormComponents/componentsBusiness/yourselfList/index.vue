@@ -58,9 +58,9 @@
                 class="row-box"
               >
                 <FormComp
-                  v-if="typeof itemComp.type === 'string'"
+                  v-if="`${itemComp.type}`"
                   ref="form2"
-                  :form="getConfig(itemComp)"
+                  :form="getConfig($attrs.isAutoBind?itemComp:itemComp.type, indexList, indexComp,itemComp)"
                   :key="`item6`+indexComp+Math.random()"
                   :is-auto-bind="$attrs.isAutoBind"
                 />
@@ -117,6 +117,7 @@
           <span style="color: #16b002;">队列{{index5}}-组件{{index6}}</span>
           <el-input v-model="item6.attr" placeholder="key"></el-input>
           <el-input v-model="item6.name" placeholder="名称"></el-input>
+          <el-switch v-if="item6.props && item6.props.rules" v-model="item6.props.rules.required"/>
           <div v-if="item6.options">
             <span style="text-align:center;vertical-align:middle;">选项</span>
             <span>
@@ -159,7 +160,7 @@ export default {
           ...this.$attrs.value
         }
       },
-      newForm: null
+      oldForm: null
     }
   },
   computed: {
@@ -204,19 +205,18 @@ export default {
         console.log(333, typeof vl, vl)
         let newValue = vl
         try {
-          if (typeof vl === 'string') {
+          if (typeof vl === 'string' && vl) {
             newValue = JSON.parse(vl)
+            this.form.newValue = newValue
           }
         } catch (e) {
           console.log('err=>', e)
         }
         this.$attrs.props.isAutoBind && this.$emit('onInput', newValue)
-        if (vl === '' && this.oldForm) {
+        if (!vl && this.oldForm) {
           this.form = this.oldForm
         }
         this.isClearVilidate()
-        const data = JSON.parse(JSON.stringify(vl))
-        this.newForm = data.value
       },
       deep: true,
       immediate: true
@@ -269,8 +269,24 @@ export default {
       }
     },
     // 获取表单配置
-    getConfig (item) {
-      return [item]
+    getConfig (item, indexList, indexComp, data) {
+      console.log('000', item, data)
+      let arr = []
+      if (item && item > 0) {
+        item = JSON.parse(JSON.stringify(this.newOptions))[item]
+        this.form.newValue.value[indexList][indexComp] = item
+      } else if (item && typeof item === 'string') {
+        item = data
+        this.form.newValue.value[indexList][indexComp] = data
+      }
+      arr = [item]
+      if (!item) {
+        arr = []
+      } else {
+        !this.$attrs.props.isAutoBind && this.$emit('onInput', this.form.newValue)
+      }
+      console.log('001', item, data, arr, this.form.newValue)
+      return arr
     },
     // 添加分组内元素
     handleAdd (indexList, indexTemp) {
@@ -303,35 +319,20 @@ export default {
         this.form.newValue.value.splice(indexList, 1)
       }
     },
+    validateForm () {
+      return this.validate()
+    },
     // 是否校验通过
     isVilidate () {
-      let state = false
-      const arr = []
-      this.$refs.form2 && this.$refs.form2.map((v) => {
-        if (v.validateForm) {
-          arr.push(v.validateForm())
-        }
-      })
-      if (arr.indexOf(false) === -1) {
-        state = true
-      }
-      return state
+      return true
     },
     validate () {
-      console.log(888, this.form)
       let state = true
-      // 判断字段是否数据正确，如果正确的话校验通过，否则校验不过
-      // this.oldForm = JSON.parse(JSON.stringify(this.form))
-      // if (this.isVilidate()) {
-      //   this.form.newValue = JSON.stringify(this.form.newValue)
-      // } else {
-      //   this.form.newValue = ''
-      // }
-      // state = true
-      // // 只有分数段 存在才做校验
-      // this.$refs.form.validate((res) => {
-      //   state = res
-      // })
+      this.$refs.form2.map((v) => {
+        if (!v.validateForm()) {
+          state = false
+        }
+      })
       return state
     },
     handleAvatarSuccess (res) {
@@ -342,7 +343,7 @@ export default {
       this.onDataBind()
       console.log('333-1', type, indexList, indexComp, this.form.newValue.value)
       const newForm = JSON.parse(JSON.stringify(this.form.newValue.value))
-      newForm[indexList][indexComp] = this.newOptions[type]
+      newForm[indexList][indexComp] = JSON.parse(JSON.stringify(this.newOptions))[type]
       console.log('333-2', newForm)
       setTimeout(() => {
         let form = this.form.newValue
@@ -353,6 +354,7 @@ export default {
         console.log('333-4', form)
         this.form.newValue = form
         console.log('333-5', this.form.newValue)
+        // !this.$attrs.props.isAutoBind && this.$emit('onInput', form)
       }, 0)
     },
     // 校验表单

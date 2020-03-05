@@ -126,12 +126,14 @@
         <span style="color: #16b002;">{{item7.name}}</span>
         <el-input v-model="item7.attr" placeholder="key"></el-input>
         <el-input v-model="item7.name" placeholder="名称"></el-input>
+        <el-switch v-if="item7.props && item7.props.rules" v-model="item7.props.rules.required"/>
         <div v-if="item7.type === 'YourselfList'">
           <div v-for="(item5,index5) in item7.value.value" :key="index5" style="padding-bottom: 20px;padding-top: 20px">
             <div v-for="(item6,index6) in item5" :key="index6" style="padding-bottom: 20px;">
               <span style="color: #16b002;">{{item7.name}}-队列{{index5}}-组件{{index6}}</span>
               <el-input v-model="item6.attr" placeholder="key"></el-input>
               <el-input v-model="item6.name" placeholder="名称"></el-input>
+              <el-switch v-if="item6.props && item6.props.rules" v-model="item6.props.rules.required"/>
               <div v-if="item6.options">
                 <span style="text-align:center;vertical-align:middle;">选项</span>
                 <span>
@@ -180,7 +182,8 @@ export default {
       },
       newForm: {
         newValue: {value: [[{type: ''}]]}
-      }
+      },
+      oldForm: null
     }
   },
   computed: {
@@ -217,23 +220,24 @@ export default {
         // this.$emit('onInput', vl)
         // 如果为字符串，转成json
         try {
-          if (typeof vl === 'string') {
+          if (typeof vl === 'string' && vl) {
             this.form = JSON.parse(vl)
           }
         } catch (e) {
           console.log('转换错误==>', e)
         }
-        if (vl === '' && this.oldForm) {
+        if (!vl && this.oldForm) {
           this.form = this.oldForm
         }
         // this.isClearVilidate()
         this.newForm = []
-        vl.data[vl.curMode].value.map(v => {
+        vl && vl.data && vl.data[vl.curMode].value.map(v => {
           // if (v.value[0].type === 'YourselfList') {
           if (v && v.value && v.value[0]) {
             this.newForm.push(v.value[0])
           }
         })
+        this.isClearVilidate()
       },
       deep: true,
       immediate: true
@@ -358,32 +362,14 @@ export default {
     },
     // 是否校验通过
     isVilidate () {
-      let state = false
-      const arr = []
-      this.$refs.form2 && this.$refs.form2.map((v) => {
-        if (v.validateForm) {
-          arr.push(v.validateForm())
-        }
-      })
-      if (arr.indexOf(false) === -1) {
-        state = true
-      }
-      return state
+      return true
     },
     validate () {
-      console.log(888, this.form)
-      let state = false
-      // 判断字段是否数据正确，如果正确的话校验通过，否则校验不过
-      this.oldForm = JSON.parse(JSON.stringify(this.form))
-      if (this.isVilidate()) {
-        this.form.newValue = JSON.stringify(this.form.newValue)
-      } else {
-        this.form.newValue = ''
-      }
-      state = true
-      // 只有分数段 存在才做校验
-      this.$refs.form.validate((res) => {
-        state = res
+      let state = true
+      this.$refs.form2.map((v) => {
+        if (!v.validateForm()) {
+          state = false
+        }
       })
       return state
     },

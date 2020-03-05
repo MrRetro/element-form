@@ -59,7 +59,7 @@ export default [
       ]
     },
     type: 'YourselfList',
-    props: { rules: { required: false, message: '请填写', target: 'blur' }, typeName: 'word' },
+    props: { rules: { required: true, message: '请填写', target: 'blur' }, typeName: 'word' },
     status: '1'
   },
   {
