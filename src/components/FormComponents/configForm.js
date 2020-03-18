@@ -175,11 +175,51 @@ export default [
     name: '请输入（文本）', value: '', type: 'Input', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } }
   },
   {
+    attr: 'content',
+    name: '请输入（文本域）',
+    value: '',
+    type: 'Input',
+    props: {
+      placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' }, type: 'textarea', rows: '2'
+    }
+  },
+  {
+    name: '数量', value: '', type: 'InputNumber', props: { placeholder: '请输入', rules: { required: true } }
+  },
+  {
+    name: '单项选题', value: '', type: 'Select', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } }, options: [{ key: '1', value: '男' }, { key: '2', value: '女' }]
+  },
+  {
+    name: '级联选择器', value: [], type: 'Cascader', props: { placeholder: '请输入', rules: { required: true, message: '请输入' } }, options: [{ key: '1', value: '男', children: [{ key: '3', value: '未知' }] }, { key: '2', value: '女' }]
+  },
+  {
+    name: '开关', value: false, type: 'Switch', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
+  },
+  {
+    name: '滑块', value: 30, type: 'Slider', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
+  },
+  {
+    name: '时间选择器', value: '', type: 'TimePicker', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
+  },
+  {
+    name: '日期选择器', value: '', type: 'DatePicker', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
+  },
+  {
+    name: '图片选择', value: '', type: 'Upload', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
+  },
+  {
+    name: '评分', value: 0, type: 'Rate', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
+  },
+  {
+    name: '颜色选择器', value: '', type: 'ColorPicker', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
+  },
+  {
     attr: 'tree',
     name: '树形节点',
     value: '',
     type: 'Tree',
     props: {
+      'show-checkbox': true,
       operation: true,
       placeholder: '请输入',
       rules: { required: true, message: '请输入', target: 'blur' },
@@ -237,45 +277,6 @@ export default [
         label: 'label'
       }
     }
-  },
-  {
-    attr: 'content',
-    name: '请输入（文本域）',
-    value: '',
-    type: 'Input',
-    props: {
-      placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' }, type: 'textarea', rows: '2'
-    }
-  },
-  {
-    name: '数量', value: '', type: 'InputNumber', props: { placeholder: '请输入', rules: { required: true } }
-  },
-  {
-    name: '单项选题', value: '', type: 'Select', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } }, options: [{ key: '1', value: '男' }, { key: '2', value: '女' }]
-  },
-  {
-    name: '级联选择器', value: [], type: 'Cascader', props: { placeholder: '请输入', rules: { required: true, message: '请输入' } }, options: [{ key: '1', value: '男', children: [{ key: '3', value: '未知' }] }, { key: '2', value: '女' }]
-  },
-  {
-    name: '开关', value: false, type: 'Switch', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
-  },
-  {
-    name: '滑块', value: 30, type: 'Slider', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
-  },
-  {
-    name: '时间选择器', value: '', type: 'TimePicker', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
-  },
-  {
-    name: '日期选择器', value: '', type: 'DatePicker', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
-  },
-  {
-    name: '图片选择', value: '', type: 'Upload', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
-  },
-  {
-    name: '评分', value: 0, type: 'Rate', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
-  },
-  {
-    name: '颜色选择器', value: '', type: 'ColorPicker', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
   },
   {
     name: '穿梭框', value: [], type: 'Transfer', props: { placeholder: '选择', rules: { required: true, message: '请选择' }, data: [] }

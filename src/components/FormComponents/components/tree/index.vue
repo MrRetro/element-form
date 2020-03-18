@@ -15,7 +15,6 @@
       >
         <el-tree
           ref="tree"
-          show-checkbox
           node-key="id"
           v-bind="$attrs.props"
           :default-checked-keys="form.newValue"
