@@ -175,6 +175,70 @@ export default [
     name: '请输入（文本）', value: '', type: 'Input', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } }
   },
   {
+    attr: 'tree',
+    name: '树形节点',
+    value: '',
+    type: 'Tree',
+    props: {
+      operation: true,
+      placeholder: '请输入',
+      rules: { required: true, message: '请输入', target: 'blur' },
+      'default-expanded-keys': [201],
+      'default-checked-keys': [20101],
+      data: [{
+        id: 1,
+        label: '一级 1',
+        children: [{
+          id: 101,
+          label: '二级 1-1',
+          children: [{
+            id: 10101,
+            label: '三级 1-1-1'
+          }]
+        }]
+      }, {
+        id: 2,
+        label: '一级 2',
+        children: [{
+          id: 201,
+          label: '二级 2-1',
+          children: [{
+            id: 20101,
+            label: '三级 2-1-1'
+          }]
+        }, {
+          id: 202,
+          label: '二级 2-2',
+          children: [{
+            id: 20201,
+            label: '三级 2-2-1'
+          }]
+        }]
+      }, {
+        id: 3,
+        label: '一级 3',
+        children: [{
+          id: 301,
+          label: '二级 3-1',
+          children: [{
+            id: 30101,
+            label: '三级 3-1-1'
+          }]
+        }, {
+          id: 302,
+          label: '二级 3-2',
+          children: [{
+            label: '三级 3-2-1'
+          }]
+        }]
+      }],
+      props: {
+        children: 'children',
+        label: 'label'
+      }
+    }
+  },
+  {
     attr: 'content',
     name: '请输入（文本域）',
     value: '',
