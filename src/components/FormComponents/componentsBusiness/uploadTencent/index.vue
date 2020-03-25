@@ -102,10 +102,6 @@ export default {
     }
   },
   methods: {
-    // 分数只能是数字
-    inputChange (value) {
-      value = value.replace(/[^\d]/g, '')
-    },
     // 时时校验-校验通过清除提示
     isClearVilidate () {
       if (this.isVilidate()) {
@@ -191,7 +187,7 @@ export default {
       })
     },
     allHandleSuccess (res, file) {
-      console.log('allHandleSuccess')
+      console.log('allHandleSuccess', res, file)
       // this.imageUrl = URL.createObjectURL(file.raw)
     },
     // 上传文件
@@ -216,11 +212,10 @@ export default {
       }, function (err, data) {
         console.log('cos==>', err, data)
         const url = `http://${data.Bucket}.cos.ap-guangzhou.myqcloud.com/${data.Key}`
-        this.form.newValue.map(v => {
+        self.form.newValue.map(v => {
           if (v.name === fileName) {
             v.url = url
             v.md5 = newFileName
-            // state = false
           }
         })
       })
