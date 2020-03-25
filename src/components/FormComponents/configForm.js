@@ -86,6 +86,13 @@ export default [
     status: '1'
   },
   {
+    name: '资源上传(腾讯云)',
+    value: '',
+    type: 'UploadTencent',
+    props: { rules: { required: true, message: '请选择', target: 'blur' } },
+    status: '1'
+  },
+  {
     name: '评分规则模版',
     value: '',
     type: 'SelectScoreRules',
@@ -205,7 +212,7 @@ export default [
     name: '日期选择器', value: '', type: 'DatePicker', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
   },
   {
-    name: '图片选择', value: '', type: 'Upload', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }
+    name: '图片选择', value: '', type: 'Upload', props: { action: 'https://jsonplaceholder.typicode.com/posts/', placeholder: '选择', rules: { required: true, message: '请选择' } }
   },
   {
     name: '评分', value: 0, type: 'Rate', props: { placeholder: '选择', rules: { required: true, message: '请选择' } }

@@ -6,6 +6,7 @@ import 'vue-hljs/dist/vue-hljs.min.css'
 // import ElementUI from 'element-ui'
 // import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
+import md5 from 'js-md5'
 import router from './router'
 
 /* eslint-disable */
@@ -14,6 +15,7 @@ Vue.use(vueHljs)
 
 /* eslint-disable */
 Vue.config.productionTip = false
+Vue.prototype.$md5 = md5
 
 /* eslint-disable no-new */
 new Vue({
