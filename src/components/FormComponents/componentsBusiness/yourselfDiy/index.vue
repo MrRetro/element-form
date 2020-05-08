@@ -161,7 +161,8 @@ export default {
         this.getNewForm()
         this.isClearVilidate()
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   methods: {

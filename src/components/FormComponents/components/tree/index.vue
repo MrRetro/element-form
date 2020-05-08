@@ -19,6 +19,7 @@
           v-bind="$attrs.props"
           :default-checked-keys="form.newValue"
           @check="check"
+          @current-change="currentChange"
         >
           <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
@@ -111,10 +112,15 @@ export default {
       this.editName = data.label
       this.editNode = data
     },
+    currentChange (data, node) {
+      console.log('getCurrentKey==>', data, node)
+      this.$emit('onInput', {data, node})
+    },
     check (res, res1, res2, res3) {
       // 获取选中节点数组
       let arr = this.$refs.tree.getCheckedNodes()
       this.form.newValue = arr
+      console.log('tree==>', res, res1, res2, res3)
 
       this.isClearVilidate()
     },

@@ -13,41 +13,18 @@
       >
         <div>
           <el-upload
+            v-bind="$attrs.props"
             ref="upload"
             action="#"
-            class="avatar-uploader"
-            list-type="picture-card"
-            :file-list="form.newValue"
+            class="avatar-uploader-box"
+            :show-file-list="false"
             :on-change="onChange"
             :http-request="httpRequest"
             :before-upload="beforeUpload"
           >
-            <i slot="default" class="el-icon-plus"></i>
-            <div slot="file" slot-scope="{file}">
-              <img
-                class="el-upload-list__item-thumbnail"
-                :src="file.url" alt=""
-              >
-              <span class="el-upload-list__item-actions">
-                <span
-                  class="el-upload-list__item-preview"
-                  @click="handlePictureCardPreview(file)"
-                >
-                  <i class="el-icon-zoom-in"></i>
-                </span>
-                <span
-                  v-if="!disabled"
-                  class="el-upload-list__item-delete"
-                  @click="handleRemove(file)"
-                >
-                  <i class="el-icon-delete"></i>
-                </span>
-              </span>
-            </div>
+            <img v-if="form.newValue" :src="form.newValue" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="big-img" />
-          </el-dialog>
         </div>
       </el-form-item>
     </el-form>
@@ -56,8 +33,9 @@
 
 <script>
 import COS from 'cos-js-sdk-v5'
+import BMF from 'browser-md5-file'
 export default {
-  name: 'ImUploadTencent',
+  name: 'ImUploadSingleTencent',
   props: {
     value: [String, Number, Array, Object]
   },
@@ -66,8 +44,9 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       disabled: false,
+      fileList: [],
       form: {
-        newValue: []
+        newValue: ''
       },
       oldForm: null
     }
@@ -75,17 +54,15 @@ export default {
   computed: {
     isRequired () {
       return this.$attrs.props.rules && this.$attrs.props.rules.required
+    },
+    tencentConfig () {
+      return this.$attrs.attrs.isPlat ? this.$store.state.tencentPlatform : this.$store.state.tencent
     }
   },
   watch: {
     value: {
       handler (vl) {
-        if (vl && typeof vl === 'string') {
-          const data = JSON.parse(vl)
-          this.form.newValue = data
-        } else if (typeof vl === 'object') {
-          this.form.newValue = vl
-        }
+        this.form.newValue = vl
       },
       deep: true,
       immediate: true
@@ -123,9 +100,9 @@ export default {
     validate () {
       let state = false
       // 判断字段是否数据正确，如果正确的话校验通过，否则校验不过
-      this.oldForm = JSON.parse(JSON.stringify(this.form))
+      this.oldForm = this.form
       if (this.isVilidate()) {
-        this.form.newValue = JSON.stringify(this.form.newValue)
+        // this.form.newValue = this.form.newValue
       } else {
         this.form.newValue = ''
       }
@@ -165,25 +142,25 @@ export default {
     },
     onChange (file, fileList) {
       console.log('handleChange')
-      this.form.newValue = fileList
+      this.fileList = fileList
     },
-    beforeUpload (file) {
-      console.log('before_upload==>', file)
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
+    beforeUpload () {
+      // console.log('before_upload==>', file)
+      // const isJPG = file.type === 'image/jpeg'
+      // const isLt2M = file.size / 1024 / 1024 < 2
+      //
+      // if (!isJPG) {
+      //   this.$message.error('上传头像图片只能是 JPG 格式!')
+      // }
+      // if (!isLt2M) {
+      //   this.$message.error('上传头像图片大小不能超过 2MB!')
+      // }
+      // return isJPG && isLt2M
     },
     httpRequest () {
       console.log('allUpload')
-      this.form.newValue.map(v => {
-        if (!v.url.startsWith('http')) this.upLoad(v.name, v.raw)
+      this.fileList.map(v => {
+        if (v.name) this.upLoad(v.name, v.raw)
       })
     },
     allHandleSuccess (res, file) {
@@ -194,37 +171,66 @@ export default {
     upLoad (fileName, file) {
       console.log('file==>', fileName, file)
       const self = this
-      const newFileName = self.$md5(file.toString()) + '.' + fileName.split('.')[1]
-      const cos = new COS({
-        SecretId: self.$store.state.tencent.resource_token.credentials.tmpSecretId,
-        SecretKey: self.$store.state.tencent.resource_token.credentials.tmpSecretKey,
-        XCosSecurityToken: self.$store.state.tencent.resource_token.credentials.sessionToken,
-        ExpiredTime: self.$store.state.tencent.resource_token.expiredTime
-      })
+      const bmf = new BMF()
+      bmf.md5(
+        file,
+        (err, md5) => {
+          console.log('err:', err)
+          console.log('md5 string:', md5) // md5
 
-      // const file = document.getElementById('upload').files[0]
-      // if (!file) return
-      cos.putObject({
-        'x-cos-meta-fileName': encodeURIComponent(fileName),
-        Bucket: self.$store.state.tencent.resource_meta.bucket,
-        Region: self.$store.state.tencent.resource_meta.region,
-        Key: newFileName,
-        Body: file
-      }, function (err, data) {
-        console.log('cos==>', err, data)
-        const url = `http://${data.Location}`
-        self.form.newValue.map(v => {
-          if (v.name === fileName) {
-            v.url = url
-            v.md5 = newFileName
-          }
-        })
-      })
+          const newFileName = md5 + '.' + fileName.split('.')[1]
+          const cos = new COS({
+            SecretId: self.tencentConfig.resource_token.credentials.tmpSecretId,
+            SecretKey: self.tencentConfig.resource_token.credentials.tmpSecretKey,
+            XCosSecurityToken: self.tencentConfig.resource_token.credentials.sessionToken,
+            ExpiredTime: self.tencentConfig.resource_token.expiredTime
+          })
+
+          // const file = document.getElementById('upload').files[0]
+          // if (!file) return
+          cos.putObject({
+            'x-cos-meta-fileName': encodeURIComponent(fileName),
+            Bucket: self.tencentConfig.resource_meta.bucket,
+            Region: self.tencentConfig.resource_meta.region,
+            Key: newFileName,
+            Body: file
+          }, function (err, data) {
+            console.log('cos==>', err, data)
+            self.form.newValue = `https://${data.Location}`
+          })
+        },
+        progress => {
+          console.log('progress number:', progress)
+        }
+      )
     }
   }
 }
 </script>
-
+<style>
+  .form-input .avatar-uploader-box .el-upload {
+    width: 140px;
+    height: 140px;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background-color: #fbfdff;
+    border: 1px dashed #c0ccda;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .form-input .avatar-uploader-box .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .form-input .avatar-uploader-box .el-icon-plus {
+    font-size: 28px;
+    color: #8c939d;
+  }
+</style>
 <style scoped>
 .warn{
   color: #ff2c2c;

@@ -14,6 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "browser-md5-file": "^1.1.1",
     "cos-js-sdk-v5": "^0.5.24",
     "element-ui": "^2.13.0",
     "js-md5": "^0.7.3",

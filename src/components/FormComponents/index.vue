@@ -215,7 +215,7 @@ export default {
       this.$emit('onForm', this.newForm)
       // 回调通知组件变更
       if (item) {
-        this.$emit('onAttr', item)
+        this.$emit('onAttr', item, target, index)
       }
     },
     getFormValue () {

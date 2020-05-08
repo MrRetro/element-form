@@ -13,6 +13,7 @@
       >
         <div>
           <el-upload
+            v-bind="$attrs.props"
             ref="upload"
             action="#"
             class="avatar-uploader"
@@ -45,7 +46,10 @@
               </span>
             </div>
           </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
+          <el-dialog
+            :visible.sync="dialogVisible"
+            :append-to-body="true"
+          >
             <img width="100%" :src="dialogImageUrl" alt="big-img" />
           </el-dialog>
         </div>
@@ -169,21 +173,17 @@ export default {
     },
     beforeUpload (file) {
       console.log('before_upload==>', file)
-      const isJPG = file.type === 'image/jpeg'
       const isLt2M = file.size / 1024 / 1024 < 2
 
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
-      }
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 2MB!')
       }
-      return isJPG && isLt2M
+      return isLt2M
     },
     httpRequest () {
       console.log('allUpload')
       this.form.newValue.map(v => {
-        if (!v.md5) this.upLoad(v.name, v.raw)
+        if (!v.url.startsWith('http')) this.upLoad(v.name, v.raw)
       })
     },
     allHandleSuccess (res, file) {
@@ -204,14 +204,15 @@ export default {
 
       // const file = document.getElementById('upload').files[0]
       // if (!file) return
-      cos.sliceUploadFile({
+      cos.putObject({
+        'x-cos-meta-fileName': encodeURIComponent(fileName),
         Bucket: self.$store.state.tencent.resource_meta.bucket,
         Region: self.$store.state.tencent.resource_meta.region,
         Key: newFileName,
         Body: file
       }, function (err, data) {
         console.log('cos==>', err, data)
-        const url = `http://${data.Bucket}.cos.ap-guangzhou.myqcloud.com/${data.Key}`
+        const url = `https://${data.Location}`
         self.form.newValue.map(v => {
           if (v.name === fileName) {
             v.url = url

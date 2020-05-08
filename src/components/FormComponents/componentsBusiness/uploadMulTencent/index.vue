@@ -11,19 +11,19 @@
         prop="newValue"
         class="item"
       >
-        <div>
-          <el-upload
-            ref="upload"
-            action="#"
-            class="avatar-uploader-box"
-            :show-file-list="false"
-            :on-change="onChange"
-            :http-request="httpRequest"
-            :before-upload="beforeUpload"
-          >
-            <img v-if="form.newValue" :src="form.newValue" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
+        <div class="upload-mul-box">
+          <template v-for="(item,index) in form.newValue">
+            <div
+              class="upload-text"
+              :key="index">
+                <UploadSingle
+                  class="upload-box"
+                  :image.sync="item.url"
+                  v-bind="$attrs"
+                />
+              <span class="name">{{item.name}}</span>
+            </div>
+          </template>
         </div>
       </el-form-item>
     </el-form>
@@ -31,19 +31,29 @@
 </template>
 
 <script>
-import COS from 'cos-js-sdk-v5'
+import UploadSingle from './components/UploadSingle'
 export default {
-  name: 'ImUploadSingleTencent',
+  name: 'ImUploadMulTencent',
+  components: {
+    UploadSingle
+  },
   props: {
     value: [String, Number, Array, Object]
   },
   data () {
     return {
+      formData: {
+        name: '',
+        value: '',
+        type: 'UploadSingleTencent',
+        props: { rules: { required: true, message: '请选择', target: 'blur' } },
+        status: '1'
+      },
       dialogImageUrl: '',
       dialogVisible: false,
       disabled: false,
       form: {
-        newValue: []
+        newValue: [{url: ''}]
       },
       oldForm: null
     }
@@ -123,73 +133,6 @@ export default {
     // 清除表单
     formClearValidate () {
       this.$refs.form && this.$refs.form.clearValidate()
-    },
-
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-      let index = -1
-      this.form.newValue.map((v, i) => {
-        if (v.name === file.name) {
-          index = i
-        }
-      })
-      this.form.newValue.splice(index, 1)
-    },
-    handlePictureCardPreview (file) {
-      this.dialogImageUrl = file.url
-      this.dialogVisible = true
-    },
-    onChange (file, fileList) {
-      // console.log('handleChange')
-      // this.form.newValue = fileList
-    },
-    beforeUpload (file) {
-      // console.log('before_upload==>', file)
-      // const isJPG = file.type === 'image/jpeg'
-      // const isLt2M = file.size / 1024 / 1024 < 2
-      //
-      // if (!isJPG) {
-      //   this.$message.error('上传头像图片只能是 JPG 格式!')
-      // }
-      // if (!isLt2M) {
-      //   this.$message.error('上传头像图片大小不能超过 2MB!')
-      // }
-      // return isJPG && isLt2M
-    },
-    httpRequest () {
-      console.log('allUpload')
-      this.form.newValue.map(v => {
-        if (!v.url.startsWith('http')) this.upLoad(v.name, v.raw)
-      })
-    },
-    allHandleSuccess (res, file) {
-      console.log('allHandleSuccess', res, file)
-      // this.imageUrl = URL.createObjectURL(file.raw)
-    },
-    // 上传文件
-    upLoad (fileName, file) {
-      console.log('file==>', fileName, file)
-      const self = this
-      const newFileName = self.$md5(file.toString()) + '.' + fileName.split('.')[1]
-      const cos = new COS({
-        SecretId: self.$store.state.tencent.resource_token.credentials.tmpSecretId,
-        SecretKey: self.$store.state.tencent.resource_token.credentials.tmpSecretKey,
-        XCosSecurityToken: self.$store.state.tencent.resource_token.credentials.sessionToken,
-        ExpiredTime: self.$store.state.tencent.resource_token.expiredTime
-      })
-
-      // const file = document.getElementById('upload').files[0]
-      // if (!file) return
-      cos.putObject({
-        'x-cos-meta-fileName': encodeURIComponent(fileName),
-        Bucket: self.$store.state.tencent.resource_meta.bucket,
-        Region: self.$store.state.tencent.resource_meta.region,
-        Key: newFileName,
-        Body: file
-      }, function (err, data) {
-        console.log('cos==>', err, data)
-        self.form.newValue = `http://${data.Location}`
-      })
     }
   }
 }
@@ -283,5 +226,23 @@ export default {
 
 .item >>> .iconfont{
   font-size: 22px;
+}
+.upload-mul-box{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.upload-mul-box .upload-box{
+  /*margin-right: 10px;*/
+  margin: 0px 5px;
+}
+.upload-text{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.upload-text .name{
+  margin-top: 6px;
 }
 </style>

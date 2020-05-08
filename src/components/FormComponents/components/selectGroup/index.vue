@@ -15,11 +15,18 @@
           v-bind="$attrs.props"
           v-model="form.newValue"
         >
-          <el-option
-            v-for="item in $attrs.options"
-            :key="item.key"
-            :label="item.value"
-            :value="item.key"/>
+          <el-option-group
+            v-for="(item1, index1) in $attrs.options"
+            :key="index1"
+            :label="item1.value"
+          >
+            <el-option
+              v-for="item in (item1.childrens||[])"
+              :key="item.key"
+              :label="item.value"
+              :value="item.key">
+            </el-option>
+          </el-option-group>
         </el-select>
       </el-form-item>
     </el-form>
@@ -30,7 +37,7 @@
 import { common } from '../../mixins/common'
 
 export default {
-  name: 'ImSelect',
+  name: 'ImSelectGroup',
   mixins: [common]
 }
 </script>

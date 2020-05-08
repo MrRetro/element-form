@@ -93,6 +93,40 @@ export default [
     status: '1'
   },
   {
+    name: '资源(单张)上传(腾讯云)',
+    value: '',
+    type: 'UploadSingleTencent',
+    props: {
+      accept: 'image/jpeg',
+      rules: { required: true, message: '请选择', target: 'blur' }
+    },
+    status: '1'
+  },
+  {
+    name: '资源上传(腾讯云-动画)',
+    value: '',
+    type: 'UploadZipTencent',
+    props: { rules: { required: true, message: '请选择', target: 'blur' } },
+    status: '1'
+  },
+  {
+    name: '资源(多张)上传(腾讯云)',
+    value: '',
+    type: 'UploadMulTencent',
+    props: {
+      accept: 'image/jpeg',
+      rules: { required: true, message: '请选择', target: 'blur' }
+    },
+    status: '1'
+  },
+  {
+    name: '导航管理',
+    value: [],
+    type: 'NavManage',
+    props: { rules: { required: true, message: '请添加并填入', target: 'blur' } },
+    status: '1'
+  },
+  {
     name: '评分规则模版',
     value: '',
     type: 'SelectScoreRules',
@@ -195,6 +229,9 @@ export default [
   },
   {
     name: '单项选题', value: '', type: 'Select', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } }, options: [{ key: '1', value: '男' }, { key: '2', value: '女' }]
+  },
+  {
+    name: '分组单项选题', value: '', type: 'SelectGroup', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } }, options: [{ key: '1', value: '男', childrens: [{key: '1', value: '男1'}] }, { key: '2', value: '女' }]
   },
   {
     name: '级联选择器', value: [], type: 'Cascader', props: { placeholder: '请输入', rules: { required: true, message: '请输入' } }, options: [{ key: '1', value: '男', children: [{ key: '3', value: '未知' }] }, { key: '2', value: '女' }]

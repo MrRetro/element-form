@@ -13,6 +13,7 @@
       >
         <div>
           <el-upload
+            v-bind="$attrs.props"
             ref="upload"
             action="#"
             class="avatar-uploader-box"
@@ -21,8 +22,12 @@
             :http-request="httpRequest"
             :before-upload="beforeUpload"
           >
-            <img v-if="form.newValue" :src="form.newValue" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <span
+              v-if="form.newValue"
+              class="ico"
+              :class="{'el-icon-folder':form.newValue}"
+            ></span>
+<!--            <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
           </el-upload>
         </div>
       </el-form-item>
@@ -32,6 +37,7 @@
 
 <script>
 import COS from 'cos-js-sdk-v5'
+import BMF from 'browser-md5-file'
 export default {
   name: 'ImUploadSingleTencent',
   props: {
@@ -60,12 +66,7 @@ export default {
   watch: {
     value: {
       handler (vl) {
-        if (vl && typeof vl === 'string') {
-          const data = JSON.parse(vl)
-          this.form.newValue = data
-        } else if (typeof vl === 'object') {
-          this.form.newValue = vl
-        }
+        this.form.newValue = vl
       },
       deep: true,
       immediate: true
@@ -174,26 +175,38 @@ export default {
     upLoad (fileName, file) {
       console.log('file==>', fileName, file)
       const self = this
-      const newFileName = self.$md5(JSON.stringify(file)) + '.' + fileName.split('.')[1]
-      const cos = new COS({
-        SecretId: self.tencentConfig.resource_token.credentials.tmpSecretId,
-        SecretKey: self.tencentConfig.resource_token.credentials.tmpSecretKey,
-        XCosSecurityToken: self.tencentConfig.resource_token.credentials.sessionToken,
-        ExpiredTime: self.tencentConfig.resource_token.expiredTime
-      })
+      const bmf = new BMF()
+      bmf.md5(
+        file,
+        (err, md5) => {
+          console.log('err:', err)
+          console.log('md5 string:', md5) // md5
 
-      // const file = document.getElementById('upload').files[0]
-      // if (!file) return
-      cos.putObject({
-        'x-cos-meta-fileName': encodeURIComponent(fileName),
-        Bucket: self.tencentConfig.resource_meta.bucket,
-        Region: self.tencentConfig.resource_meta.region,
-        Key: newFileName,
-        Body: file
-      }, function (err, data) {
-        console.log('cos==>', err, data)
-        self.form.newValue = `http://${data.Location}`
-      })
+          const newFileName = md5 + '.' + fileName.split('.')[1]
+          const cos = new COS({
+            SecretId: self.tencentConfig.resource_token.credentials.tmpSecretId,
+            SecretKey: self.tencentConfig.resource_token.credentials.tmpSecretKey,
+            XCosSecurityToken: self.tencentConfig.resource_token.credentials.sessionToken,
+            ExpiredTime: self.tencentConfig.resource_token.expiredTime
+          })
+
+          // const file = document.getElementById('upload').files[0]
+          // if (!file) return
+          cos.putObject({
+            'x-cos-meta-fileName': encodeURIComponent(fileName),
+            Bucket: self.tencentConfig.resource_meta.bucket,
+            Region: self.tencentConfig.resource_meta.region,
+            Key: newFileName,
+            Body: file
+          }, function (err, data) {
+            console.log('cos==>', err, data, md5)
+            self.form.newValue = md5
+          })
+        },
+        progress => {
+          console.log('progress number:', progress)
+        }
+      )
     }
   }
 }
@@ -251,6 +264,9 @@ export default {
   flex-direction: row;
   flex: 1;
   margin-bottom: 20px;
+}
+.item .ico{
+  font-size: 20px;
 }
 .row-box{
   width: 100%;

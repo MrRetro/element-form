@@ -22,7 +22,7 @@
             :http-request="httpRequest"
             :before-upload="beforeUpload"
           >
-            <img v-if="form.newValue" :src="form.newValue" class="avatar">
+            <img v-if="form.newValue.url" :src="form.newValue.url" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </div>
@@ -35,7 +35,7 @@
 import COS from 'cos-js-sdk-v5'
 import BMF from 'browser-md5-file'
 export default {
-  name: 'ImUploadSingleTencent',
+  name: 'ImUploadSingleTencent2',
   props: {
     value: [String, Number, Array, Object]
   },
@@ -46,7 +46,9 @@ export default {
       disabled: false,
       fileList: [],
       form: {
-        newValue: ''
+        newValue: {
+          url: ''
+        }
       },
       oldForm: null
     }
@@ -92,7 +94,7 @@ export default {
     isVilidate () {
       // 所有路径都必须有数据
       let state = true
-      if (this.isRequired && this.form.newValue && this.form.newValue.length === 0) {
+      if (this.isRequired && this.form.newValue && !this.form.newValue.url) {
         state = false
       }
       return state
@@ -102,7 +104,7 @@ export default {
       // 判断字段是否数据正确，如果正确的话校验通过，否则校验不过
       this.oldForm = this.form
       if (this.isVilidate()) {
-        this.form.newValue = this.form.newValue
+        // this.form.newValue = this.form.newValue
       } else {
         this.form.newValue = ''
       }
@@ -196,7 +198,10 @@ export default {
             Body: file
           }, function (err, data) {
             console.log('cos==>', err, data)
-            self.form.newValue = `https://${data.Location}`
+            self.form.newValue = {
+              name: fileName,
+              url: `https://${data.Location}`
+            }
           })
         },
         progress => {
