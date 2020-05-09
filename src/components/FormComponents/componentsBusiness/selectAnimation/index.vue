@@ -12,7 +12,8 @@
         class="item"
       >
 
-        <div
+        <FileDialog
+          :value.sync="form.newValue"
           width="100%"
           height="100%"
           type="animation"
