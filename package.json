@@ -11,7 +11,8 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "commit": "git-cz"
   },
   "dependencies": {
     "browser-md5-file": "^1.1.1",
@@ -40,10 +41,12 @@
     "browser-sync": "^2.26.7",
     "chalk": "^2.0.1",
     "chromedriver": "^2.27.2",
+    "commitizen": "^4.2.3",
     "compression-webpack-plugin": "^1.1.2",
     "copy-webpack-plugin": "^4.0.1",
     "cross-spawn": "^5.0.1",
     "css-loader": "^0.28.0",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",

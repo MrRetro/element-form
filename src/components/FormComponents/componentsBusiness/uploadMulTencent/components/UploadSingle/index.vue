@@ -133,6 +133,11 @@ export default {
 }
 </script>
 <style>
+  .upload-box .avatar{
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
   .avatar-uploader-box .el-upload {
     width: 140px;
     height: 140px;

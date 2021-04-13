@@ -207,15 +207,18 @@ export default {
     }
   },
   methods: {
-    onInput (target, index, item) {
-      console.log(9995, target)
-      console.log(777, target)
+    onInput (target, index, item, type) {
+      console.log('onInput=>', target, index, item, type)
       this.newForm[index].value = target
 
       this.$emit('onForm', this.newForm)
       // 回调通知组件变更
       if (item) {
         this.$emit('onAttr', item, target, index)
+      }
+      // 组件内回调其他事件
+      if (item && type) {
+        this.$emit('onEvent', item, type, target, index)
       }
     },
     getFormValue () {

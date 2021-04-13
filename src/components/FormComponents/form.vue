@@ -37,9 +37,9 @@ export default {
     }
   },
   methods: {
-    onInput (vl) {
+    onInput (vl, type) {
       console.log(9994, vl)
-      this.$emit('onInput', vl, this.index, this.$attrs)
+      this.$emit('onInput', vl, this.index, this.$attrs, type)
     },
     validate () {
       return this.$refs.formItem.validate && this.$refs.formItem.validate()

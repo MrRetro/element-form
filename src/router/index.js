@@ -20,6 +20,16 @@ export default new VueRouter({
       path: '/form',
       name: 'form',
       component: () => import('../views/main/form')
+    },
+    {
+      path: '/linkage',
+      name: 'linkage',
+      component: () => import('../views/main/linkage')
     }
+    // {
+    //   path: '/test',
+    //   name: 'test',
+    //   component: () => import('../views/test')
+    // }
   ]
 })

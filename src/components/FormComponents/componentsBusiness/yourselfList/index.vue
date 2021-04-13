@@ -44,7 +44,7 @@
             :key="'lay'+indexList+Math.random()"
             class="list-box">
             <div
-              v-if="getIsShowBtn(0)"
+              v-if="getIsShowBtn(0) && indexList > 0"
               class="delete"
               @click="handleDeleteRow(indexList)"
             >x</div>

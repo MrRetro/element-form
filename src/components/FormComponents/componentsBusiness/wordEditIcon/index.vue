@@ -18,12 +18,10 @@
           type="audio"
           preview
         >
-          <span
-            slot="placeholder"
-            class="layout-placeholder"
-          >
-            选择音频
+          <span class="word">
+            {{form.newValue}}
           </span>
+          <i :class="`icon el-icon-${$attrs.props.icon?$attrs.props.icon:'edit'}`" @click="$emit('onInput', form.newValue, 'edit')"></i>
         </div>
       </el-form-item>
     </el-form>
@@ -32,7 +30,7 @@
 
 <script>
 export default {
-  name: 'ImSelectAudio',
+  name: 'ImWordEditIcon',
   props: {
     value: [String, Number]
   },
@@ -80,6 +78,9 @@ export default {
     display: flex;
     flex-direction: row;
   }
+  .word{
+    margin-right: 10px;
+  }
   .item{
     display: flex;
     flex-direction: row;
@@ -95,5 +96,8 @@ export default {
   }
   .isRequired{
     padding-left: 10px;
+  }
+  .icon{
+    cursor: pointer;
   }
 </style>

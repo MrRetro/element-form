@@ -44,6 +44,7 @@
           :form="form"
           :sub-name="Object.keys(form[0]).includes('value') && !isDesc?'提交校验表单':''"
           @onAttr="onAttr"
+          @onEvent="onEvent"
           @onDelete="onDelete"
         />
 
@@ -167,6 +168,9 @@ export default {
           default:
         }
       }
+    },
+    onEvent (item, type) {
+      console.log('retro==>onEvent', item, type)
     },
     // 添加组件
     addComp (index = 0, type) {

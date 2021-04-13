@@ -22,8 +22,9 @@
             :http-request="httpRequest"
             :before-upload="beforeUpload"
           >
-            <img v-if="form.newValue" :src="form.newValue" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <img v-if="['.png', '.jpg', '.jpeg'].includes(getExtend)" :src="form.newValue" class="avatar">
+            <span v-else-if="form.newValue && getExtend" class="extend">{{getExtend}}</span>
+            <span v-if="!form.newValue" class="el-icon-plus avatar-uploader-icon"></span>
           </el-upload>
         </div>
       </el-form-item>
@@ -52,10 +53,26 @@ export default {
     }
   },
   computed: {
+    // 获取文件扩展名称
+    getExtend () {
+      let extend = ''
+      try {
+        let arr = this.form.newValue.split('.')
+        let name = arr[arr.length - 1]
+        extend = name ? `.${name}` : ``
+      } catch (e) {
+        console.log('获取文件扩展名失败==>', extend)
+      }
+      return extend
+    },
     isRequired () {
       return this.$attrs.props.rules && this.$attrs.props.rules.required
     },
     tencentConfig () {
+      // let state = false
+      // if (tpyeof this.$store.getters.isPlat === '') {
+      //
+      // }
       return this.$attrs.attrs.isPlat ? this.$store.state.tencentPlatform : this.$store.state.tencent
     }
   },
@@ -232,6 +249,14 @@ export default {
   }
 </style>
 <style scoped>
+.avatar{
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+.extend{
+  color: gainsboro;
+}
 .warn{
   color: #ff2c2c;
   font-size: 12px;

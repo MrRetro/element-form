@@ -157,10 +157,66 @@ export default [
     props: {},
     status: '1'
   }, {
+    name: '选择语音',
+    value: '',
+    type: 'WordEditIcon',
+    props: { rules: { required: true, message: '请选择', target: 'blur' } },
+    status: '1'
+  }, {
     name: '请选择word',
     value: '',
     type: 'SelectDoc',
     props: { rules: { required: true, message: '请选择', target: 'blur' } },
+    status: '1'
+  }, {
+    name: '文本域带icon',
+    value: '',
+    type: 'TextareaIcon',
+    props: { rules: { required: true, message: '请选择', target: 'blur' }, type: 'textarea', row: 2 },
+    status: '1'
+  }, {
+    name: '按钮组',
+    value: '',
+    type: 'Btns',
+    props: {
+      rules: {
+        required: false,
+        message: '请选择',
+        target: 'blur'
+      },
+      type: 'textarea',
+      row: 2
+    },
+    status: '1',
+    options: [
+      {key: 'html', value: '网页录制'},
+      {key: 'weixin', value: '微信录制'}
+    ]
+  }, {
+    name: '树形组件(业务)',
+    value: {
+      curNode: {key: ''},
+      options: [
+        {key: 'html',
+          value: '网页录制',
+          children: [
+            {key: '1',
+              value: '页面1-1',
+              children: [
+                {key: '1-1', value: '页面1-1'}
+              ]}
+          ]},
+        {key: 'weixin', value: '微信录制'}
+      ]
+    },
+    type: 'PreTree',
+    props: {
+      rules: {
+        required: false,
+        message: '请选择',
+        target: 'blur'
+      }
+    },
     status: '1'
   },
   {

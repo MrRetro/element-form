@@ -22,8 +22,9 @@
             :http-request="httpRequest"
             :before-upload="beforeUpload"
           >
-            <img v-if="form.newValue.url" :src="form.newValue.url" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <img v-if="['.jpg', '.jpeg', '.png'].includes(getExtend)" :src="form.newValue.url" class="avatar">
+            <span v-else-if="form.newValue.url && getExtend" class="extend">{{getExtend}}</span>
+            <span v-if="!form.newValue.url" class="el-icon-plus avatar-uploader-icon"></span>
           </el-upload>
         </div>
       </el-form-item>
@@ -54,6 +55,18 @@ export default {
     }
   },
   computed: {
+    // 获取文件扩展名称
+    getExtend () {
+      let extend = ''
+      try {
+        let arr = this.form.newValue.url.split('.')
+        let name = arr[arr.length - 1]
+        extend = name ? `.${name}` : ``
+      } catch (e) {
+        console.log('获取文件扩展名失败==>', extend)
+      }
+      return extend
+    },
     isRequired () {
       return this.$attrs.props.rules && this.$attrs.props.rules.required
     },
@@ -64,7 +77,11 @@ export default {
   watch: {
     value: {
       handler (vl) {
-        this.form.newValue = vl
+        if (vl && typeof vl === 'string') {
+          this.form.newValue = JSON.parse(vl)
+        } else {
+          this.form.newValue = vl
+        }
       },
       deep: true,
       immediate: true
@@ -73,7 +90,7 @@ export default {
       handler (vl) {
         this.$emit('onInput', vl)
         if (vl === '' && this.oldForm) {
-          this.form = this.oldForm
+          this.form = JSON.parse(this.oldForm)
         }
         this.isClearVilidate()
       },
@@ -102,15 +119,14 @@ export default {
     validate () {
       let state = false
       // 判断字段是否数据正确，如果正确的话校验通过，否则校验不过
-      this.oldForm = this.form
+      this.oldForm = JSON.stringify(this.form)
       if (this.isVilidate()) {
-        // this.form.newValue = this.form.newValue
+        this.form.newValue = JSON.stringify(this.form.newValue)
       } else {
         this.form.newValue = ''
       }
-      state = true
       // 只有分数段 存在才做校验
-      this.$refs.form.validate((res) => {
+      this.$refs.form && this.$refs.form.validate((res) => {
         state = res
       })
       return state
@@ -237,72 +253,80 @@ export default {
   }
 </style>
 <style scoped>
-.warn{
-  color: #ff2c2c;
-  font-size: 12px;
-}
-.input-box .del >>> span{
-  position: relative;
-  top: -1px;
-}
-.box{
-  width: 500px;
-  color: #606266;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-}
-.content-box .box:last-of-type .content{
-  margin-bottom: 0px;
-}
-.form-input{
-  display: flex;
-  flex-direction: row;
-}
-.item{
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  margin-bottom: 20px;
-}
-.row-box{
-  width: 100%;
-  display: flex;
-  padding: 0px 10px;
-  flex-direction: column;
-  border: 1px solid #eee;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  position: relative;
-}
-.row-box .del{
-  position: absolute;
-  right: 12px;
-  top: 6px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-}
-.row{
-  display: flex;
-  flex-direction: row;
-}
-.row .name{
-  margin-right: 10px;
-}
-.row .select-box{
-  display: flex;
-  flex-direction: column;
-}
-.row .select-box >>> .div{
-  width: 220px;
-  height: 40px;
-}
+  .avatar{
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+  .extend{
+    color: gainsboro;
+  }
+  .warn{
+    color: #ff2c2c;
+    font-size: 12px;
+  }
+  .input-box .del >>> span{
+    position: relative;
+    top: -1px;
+  }
+  .box{
+    width: 500px;
+    color: #606266;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .content-box .box:last-of-type .content{
+    margin-bottom: 0px;
+  }
+  .form-input{
+    display: flex;
+    flex-direction: row;
+  }
+  .item{
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    margin-bottom: 20px;
+  }
+  .row-box{
+    width: 100%;
+    display: flex;
+    padding: 0px 10px;
+    flex-direction: column;
+    border: 1px solid #eee;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    position: relative;
+  }
+  .row-box .del{
+    position: absolute;
+    right: 12px;
+    top: 6px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+  }
+  .row{
+    display: flex;
+    flex-direction: row;
+  }
+  .row .name{
+    margin-right: 10px;
+  }
+  .row .select-box{
+    display: flex;
+    flex-direction: column;
+  }
+  .row .select-box >>> .div{
+    width: 220px;
+    height: 40px;
+  }
 
-.item >>> .iconfont{
-  font-size: 22px;
-}
+  .item >>> .iconfont{
+    font-size: 22px;
+  }
 </style>

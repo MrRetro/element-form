@@ -231,6 +231,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 .upload-mul-box .upload-box{
   /*margin-right: 10px;*/
