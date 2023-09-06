@@ -4,52 +4,78 @@
     v-bind="props"
     :title="title"
   >
-    <el-button @click="handleClick">aaa</el-button>
+    <FormComponents
+      ref="form"
+      :form.sync="formData"
+      v-bind="formProps"
+      @onAttr="onAttr"
+    />
+    <span slot="footer" class="dialog-footer">
+      <el-button size="small" @click="destroy">取 消</el-button>
+      <el-button size="small" type="primary" @click="submit">确 定</el-button>
+    </span>
   </el-dialog>
 </template>
 
 <script>
-  export default {
-    name: 'index',
-    data(){
-      return {
-        visible: false,
-        title: '',
-        props: {},
-        formData: [],
-        onChange: null,
-        onCallback: null
-      }
+import FormComponents from '../../components/FormComponents'
+export default {
+  name: 'index',
+  components: {
+    FormComponents
+  },
+  data () {
+    return {
+      visible: false,
+      title: '',
+      props: {},
+      formData: [],
+      formProps: {},
+      onChange: null,
+      onCallback: null
+    }
+  },
+  methods: {
+    create ({props, title, formData, formProps, onChange, onCallback}) {
+      this.title = title
+      this.props = props || {}
+      this.formData = formData
+      this.formProps = formProps || {}
+      this.onChange = onChange
+      this.onCallback = onCallback
+      this.open()
     },
-    methods: {
-      create({props, title, formData, onChange, onCallback}){
-        this.title = title
-        this.props = props || {}
-        this.formData = formData
-        this.onChange = onChange
-        this.onCallback = onCallback
-        this.open()
-      },
-      setFormData(data){
-        this.formData = data
-      },
-      getFormData(){
-        return this.formData
-      },
-      open(){this.visible = true},
-      destroy(){
-        this.visible = false
+    setFormData (data) {
+      this.formData = data
+    },
+    getFormData () {
+      return this.formData
+    },
+    open () {
+      this.visible = true
+    },
+    destroy () {
+      this.visible = false
 
-        this.props = {}
-        this.formData = []
-        this.onChange = null
-        this.onCallback = null
-      },
-      handleClick(){
-        if(this.onChange) this.onChange(this, '111')
+      this.props = {}
+      this.formData = []
+      this.formProps = {}
+      this.onChange = null
+      this.onCallback = null
+    },
+    onAttr (item, target, index) {
+      this.onChange && this.onChange(this, item, target, index)
+    },
+    submit () {
+      const target = this.$refs.form
+      const state = target.validateForm()
+
+      if (state) {
+        this.onCallback && this.onCallback(this, target.getFormValues())
       }
     }
   }
+}
 </script>
 
 <style scoped>

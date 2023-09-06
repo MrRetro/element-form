@@ -443,5 +443,8 @@ export default [
   },
   {
     name: '我是标题：', type: 'Title', props: { placeholder: '请输入', rules: { required: true, message: '请输入', target: 'blur' } }
+  },
+  {
+    name: '$dialog', type: 'MDialog', props: { placeholder: '方法$dialog', rules: { required: true, message: '请输入', target: 'blur' } }, status: '3'
   }
 ]

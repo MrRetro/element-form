@@ -15,13 +15,13 @@ export default {
       div && div.classList.remove('hide')
       div && div.classList.add('hide')
 
-      console.error(`自我介绍\n
-我叫蔡琛，是一名前端工程师\n
+      console.log(`%c自我介绍\n
+我叫 retro，是一名前端工程师\n
 写这个网站存粹是为了提高工作效率\n
 我的邮箱：caijiajia1@126.com\n
 我的QQ：395336343，有好工作或入住广告再加哦！\n
-最后，有什么宝贵意见或要吐槽的请到github给我提issues！
-      `)
+最后，有什么宝贵意见或要吐槽的请到 gitee https://gitee.com/MrRetro/element-form 给我提 issues！
+      `, 'color: #2699ff')
     })
   }
 }

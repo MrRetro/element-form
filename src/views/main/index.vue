@@ -18,23 +18,33 @@
         <p class="title">基础组件</p>
         <p
           v-for="(item,key) in initForm"
-          v-if="!['1','2'].includes(item.status)"
+          v-if="!['1','2','3'].includes(item.status)"
           :key="key"
           :class="{active:`${key}`===`${selected}`}"
           size="small"
           class="btn"
           @click="addComp(key, item.type)"
         >{{ item.name }}</p>
-        <p class="title">业务组件</p>
+        <p class="title">方法</p>
         <p
           v-for="(item,key) in initForm"
-          v-if="['1'].includes(item.status)"
+          v-if="['3'].includes(item.status)"
           :key="key"
           :class="{active:`${key}`===`${selected}`}"
           size="small"
           class="btn"
           @click="addComp(key, item.type)"
         >{{ item.name }}</p>
+        <!--<p class="title">业务组件</p>-->
+        <!--<p-->
+          <!--v-for="(item,key) in initForm"-->
+          <!--v-if="['1'].includes(item.status)"-->
+          <!--:key="key"-->
+          <!--:class="{active:`${key}`===`${selected}`}"-->
+          <!--size="small"-->
+          <!--class="btn"-->
+          <!--@click="addComp(key, item.type)"-->
+        <!--&gt;{{ item.name }}</p>-->
       </div>
     </div>
     <div class="box right"
@@ -179,7 +189,7 @@ export default {
       // 根据类型找到类型对应的配置
       const forms = JSON.parse(JSON.stringify(configForm))
       status = forms[index].status
-      this.isDesc = `${status}` === '2'
+      this.isDesc = ['2', '3'].includes(`${status}`)
       this.selected = index
       try {
         let newForm = []

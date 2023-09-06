@@ -6,42 +6,44 @@
 import Vue from 'vue'
 import DialogComponent from './index.vue'
 let vm = null
-const getInstance = function() {
-  if(!vm) {
+const getInstance = function () {
+  if (!vm) {
     // 单例模式
     vm = new Vue({
       render: h => h(DialogComponent)
     }).$mount()
     document.body.appendChild(vm.$el)
   }
-  return vm.$children[0];
+  return vm.$children[0]
 }
 const Dialog = {
-  create(options) {
+  create (options) {
     getInstance().create(options)
   },
-  setFormData(data) {
+  setFormData (data) {
     return getInstance().setFormData(data)
   },
-  getFormData() {
+  getFormData () {
     return getInstance().getFormData()
   },
-  destroy(){
+  destroy () {
     getInstance().destroy()
   }
 }
 
 export {
-  Dialog,
+  Dialog
 }
 
 export default {
-  install(Vue) {
-    Vue.prototype.$dialog = {
-      create: Dialog.create,
-      setFormData: Dialog.setFormData,
-      getFormData: Dialog.getFormData,
-      destroy: Dialog.destroy,
+  install (Vue) {
+    Vue.prototype.ElementForm = {
+      $dialog: {
+        create: Dialog.create,
+        setFormData: Dialog.setFormData,
+        getFormData: Dialog.getFormData,
+        destroy: Dialog.destroy
+      }
     }
   }
 }

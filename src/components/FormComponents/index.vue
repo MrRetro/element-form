@@ -224,7 +224,13 @@ export default {
     getFormValue () {
       return this.newForm
     },
-
+    getFormValues () {
+      const obj = {}
+      this.newForm.forEach(v => {
+        if (v.attr) obj[v.attr] = v.value
+      })
+      return obj
+    },
     // 表单校验
     validateForm () {
       let state = true
