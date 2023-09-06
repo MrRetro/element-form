@@ -8,10 +8,12 @@ import 'vue-hljs/dist/vue-hljs.min.css'
 import App from './App'
 import md5 from 'js-md5'
 import router from './router'
+import Dialog from './plugin/dialog'
 
 /* eslint-disable */
 Vue.use(vueHljs)
 // Vue.use(ElementUI)
+Vue.use(Dialog)
 
 /* eslint-disable */
 Vue.config.productionTip = false

@@ -11,12 +11,14 @@
         prop="newValue"
         class="item"
       >
-        <el-radio-group v-model="form.newValue">
+        <el-radio-group
+          v-bind="$attrs.props"
+          v-model="form.newValue"
+        >
           <el-radio-button
             v-for="item in $attrs.options"
             :label="`${item.key}`"
             :key="item.key"
-            v-bind="$attrs.props"
           >{{ item.value }}</el-radio-button>
         </el-radio-group>
       </el-form-item>
