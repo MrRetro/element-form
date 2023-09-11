@@ -4,10 +4,13 @@
       ref="formItem"
       :is="comp"
       :attrs="$attrs"
-      v-bind="$props"
+      v-bind="['Mtable'].includes(type) ? $props.props : $props"
       v-model="value"
       style="width: 100%"
       @onInput="onInput"
+      @onFilterComp="onInput"
+      @onCellAttr="onInput"
+      @onBtns="onInput"
     />
   </div>
 </template>
@@ -38,7 +41,6 @@ export default {
   },
   methods: {
     onInput (vl, type) {
-      console.log(9994, vl)
       this.$emit('onInput', vl, this.index, this.$attrs, type)
     },
     validate () {
@@ -46,8 +48,6 @@ export default {
     },
     // 数据绑定(手动)
     onDataBind () {
-      console.log(9992, this.$refs.formItem)
-
       if (this.$refs.formItem) {
         this.$refs.formItem.onDataBind && this.$refs.formItem.onDataBind()
       }

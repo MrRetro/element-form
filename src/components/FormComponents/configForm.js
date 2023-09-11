@@ -446,5 +446,31 @@ export default [
   },
   {
     name: '$dialog', type: 'MDialog', props: { placeholder: '方法$dialog', rules: { required: true, message: '请输入', target: 'blur' } }, status: '3'
+  },
+  {
+    name: '表格',
+    type: 'Mtable',
+    props: {
+      isPage: true,
+      tableHead: [
+        {prop: 'name', label: '姓名'},
+        {prop: 'gender', label: '性别'},
+        {prop: 'age', label: '年龄'},
+        {prop: 'aihao', label: '爱好'},
+        {prop: 'zym', label: '座右铭'},
+        {prop: 'remark', label: '备注'},
+        {prop: 'operation', label: '操作'}
+      ],
+      tableData: [
+        {name: '张三', gender: '男', age: 18, aihao: '羽毛球', zym: '金诚所至今称为开', remark: '无', operation: [{key: '1', value: '添加'}, {key: '2', value: '修改'}]},
+        {name: '张三', gender: '男', age: 18, aihao: '羽毛球', zym: '金诚所至今称为开', remark: '无', operation: [{key: '1', value: '添加'}, {key: '2', value: '修改'}]},
+        {name: '张三', gender: '男', age: 18, aihao: '羽毛球', zym: '金诚所至今称为开', remark: '无', operation: [{key: '1', value: '添加'}, {key: '2', value: '修改'}]},
+        {name: '张三', gender: '男', age: 18, aihao: '羽毛球', zym: '金诚所至今称为开', remark: '无', operation: [{key: '1', value: '添加'}, {key: '2', value: '修改'}]},
+        {name: '张三', gender: '男', age: 18, aihao: '羽毛球', zym: '金诚所至今称为开', remark: '无', operation: [{key: '1', value: '添加'}, {key: '2', value: '修改'}]},
+        {name: '张三', gender: '男', age: 18, aihao: '羽毛球', zym: '金诚所至今称为开', remark: '无', operation: [{key: '1', value: '添加'}, {key: '2', value: '修改'}]},
+        {name: '张三', gender: '男', age: 18, aihao: '羽毛球', zym: '金诚所至今称为开', remark: '无', operation: [{key: '1', value: '添加'}, {key: '2', value: '修改'}]}
+      ],
+      rules: { required: true, message: '请输入', target: 'blur' }
+    }
   }
 ]

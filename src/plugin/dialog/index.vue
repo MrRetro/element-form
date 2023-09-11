@@ -1,28 +1,34 @@
 <template>
   <el-dialog
+    class="z-dialog"
     :visible.sync="visible"
     v-bind="props"
     :title="title"
+    :before-close="destroy"
   >
-    <FormComponents
+    <ElementForm
       ref="form"
+      class="element-form"
+      :class="{
+        column: ['column'].includes(formAlign),
+        'grid-half': ['2'].includes(grid)
+      }"
       :form.sync="formData"
-      v-bind="formProps"
       @onAttr="onAttr"
     />
     <span slot="footer" class="dialog-footer">
       <el-button size="small" @click="destroy">取 消</el-button>
-      <el-button size="small" type="primary" @click="submit">确 定</el-button>
+      <el-button type="primary" size="small" @click="submit">确 定</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
-import FormComponents from '../../components/FormComponents'
+import ElementForm from '../../components/FormComponents'
 export default {
-  name: 'index',
+  name: 'dialog',
   components: {
-    FormComponents
+    ElementForm
   },
   data () {
     return {
@@ -30,17 +36,19 @@ export default {
       title: '',
       props: {},
       formData: [],
-      formProps: {},
+      formAlign: '', // 表单排版 column 为上下排版
+      grid: '', // 1列、2列、3列...
       onChange: null,
       onCallback: null
     }
   },
   methods: {
-    create ({props, title, formData, formProps, onChange, onCallback}) {
+    create ({props, title, formData, formAlign, grid, onChange, onCallback}) {
       this.title = title
       this.props = props || {}
       this.formData = formData
-      this.formProps = formProps || {}
+      this.formAlign = formAlign
+      this.grid = grid
       this.onChange = onChange
       this.onCallback = onCallback
       this.open()
@@ -57,21 +65,28 @@ export default {
     destroy () {
       this.visible = false
 
-      this.props = {}
-      this.formData = []
-      this.formProps = {}
-      this.onChange = null
-      this.onCallback = null
+      const fn = setTimeout(() => {
+        this.props = {}
+        this.formData = []
+        this.formAlign = ''
+        this.grid = ''
+        this.onChange = null
+        this.onCallback = null
+        clearTimeout(fn)
+      }, 300)
     },
     onAttr (item, target, index) {
-      this.onChange && this.onChange(this, item, target, index)
+      if (this.onChange) this.onChange(this, item, target, index)
     },
     submit () {
       const target = this.$refs.form
       const state = target.validateForm()
-
-      if (state) {
-        this.onCallback && this.onCallback(this, target.getFormValues())
+      if (state && this.onCallback) {
+        const obj = {}
+        target.getFormValue().forEach(v => {
+          if (v.attr) obj[v.attr] = v.value
+        })
+        this.onCallback(this, obj)
       }
     }
   }
@@ -79,5 +94,47 @@ export default {
 </script>
 
 <style scoped>
-
+.z-dialog >>> .el-dialog__body {
+  padding: 16px 24px;
+}
+.z-dialog >>> .item{
+  margin-bottom: 16px;
+}
+.z-dialog >>> .el-form-item__content{
+  display: flex;
+  flex: 1;
+}
+.z-dialog >>> .el-dialog__footer{
+  height: initial;
+  line-height: initial;
+  padding-bottom: 20px !important;
+}
+.z-dialog >>> .element-form.column .item {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0px;
+}
+.z-dialog >>> .element-form.column .el-form-item__label {
+  text-align: left;
+}
+.z-dialog >>> .element-form.column .el-select {
+  display: flex;
+  flex: 1;
+}
+.z-dialog >>> .element-form.grid-half {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.z-dialog >>> .element-form.grid-half .component{
+  width: 47.5%;
+}
+.z-dialog >>> .element-form.grid-half .component{
+  width: 47.5%;
+}
+.z-dialog >>> .element-form.grid-half div[type='SelectClazzView']{
+  width: 210.5% !important;
+  flex-shrink: 0;
+}
 </style>
